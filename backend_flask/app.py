@@ -1,4 +1,3 @@
-from http.client import REQUEST_ENTITY_TOO_LARGE
 from flask import Flask, jsonify, render_template, request
 from flask_cors import CORS
 
