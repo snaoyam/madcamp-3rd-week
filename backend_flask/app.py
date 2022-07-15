@@ -3,13 +3,11 @@
 import os
 import database
 from io import BytesIO
+import sqlite3
 
 from flask import Flask, render_template, request, send_file, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-from pdfCropMargins import crop
 
-crop(["-p", "20", "-u", "-s", "paper1.pdf"])
-crop(["-p", "0", "-gui", "paper2.pdf"])
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
@@ -37,7 +35,11 @@ def index():
         db.session.commit()
         f"Uploaded: {file.filename}"
         uploaded_files = request.files["file"]
+        uploaded_files.stream.seek(0)
         uploaded_files.save("static/pdf_file/{}".format(file.filename))
+        os.system('pdfcrop --margins 100 "static/pdf_file/{}" "static/pdf_file/{}"'.format(file.filename, file.filename))
+        #with open("static/pdf_file/{}".format(file.filename), 'wb') as f:
+        #    f.write(uploaded_files)
         database.save(file.filename)
     return render_template('index.html')
 
@@ -57,7 +59,9 @@ def upload_done():
 @app.route("/download/<upload_id>/")
 def download(upload_id):
     upload = Upload.query.filter_by(id=upload_id).first()
-    return send_file(BytesIO(upload.data), download_name=upload.filename, as_attachment=True)
+    return send_file("static/pdf_file/{}".format(upload.filename))
+    # return send_file(BytesIO(upload.data), download_name=upload.filename, as_attachment=True)
+    # return "pdf_file/{}.pdf".format(upload.filename)
 
 
 if __name__ == '__main__':
