@@ -7,3 +7,5 @@ Jinja2==3.1.2
 MarkupSafe==2.1.1
 SQLAlchemy==1.4.39
 Werkzeug==2.1.2
+pdfCropMargins~=1.0.9
+pandas~=1.4.3
