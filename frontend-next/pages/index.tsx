@@ -12,7 +12,6 @@ const Home: NextPage = () => {
     <Box
       sx={{
         width: 500,
-        height: 400,
         margin: '50px 40px',
         backgroundColor: 'rgb(255, 253, 219)',
       }}>
