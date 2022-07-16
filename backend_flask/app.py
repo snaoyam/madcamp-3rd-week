@@ -68,10 +68,9 @@ def download(upload_id):
 @app.route("/merge")
 def merge():
     item_list = ''
-    for item in os.listdir('static/pdf_file'):
-        if item.endswith('pdf'):
-            item_list += ("'static/pdf_file/" + item + "' ")
-    os.system('pdftk {} cat output static/merged_file/complete.pdf'.format(item_list))
+    for item in database.load_list():
+        item_list += ("'static/pdf_file/" + item[1] + "' ")
+    os.system('pdftk {}cat output static/merged_file/complete.pdf'.format(item_list))
     return send_file('static/merged_file/complete.pdf',as_attachment=True)
     
 
