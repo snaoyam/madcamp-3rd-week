@@ -4,10 +4,10 @@ import os
 import database
 from io import BytesIO
 import sqlite3
-
+import copy
 from flask import Flask, render_template, request, send_file, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-
+from PyPDF2 import PdfFileMerger
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
@@ -65,14 +65,15 @@ def download(upload_id):
     # return send_file(BytesIO(upload.data), download_name=upload.filename, as_attachment=True)
     # return "pdf_file/{}.pdf".format(upload.filename)
 
-@app.route("/merge/")
+@app.route("/merge")
 def merge():
-    #upload = Upload.query.filter_by(id=upload_id).first()
-    #os.system('pdf_merge.py --margins 100 "static/pdf_file/{}" "static/pdf_file/{}"'.format(file.filename, file.filename))
-    #os.system('pdftk a.pdf b.pdf cat output c.pdf'.format(file.filename))
-    return render_template("merge.html")
-    # return send_file("static/pdf_file/{}".format(upload.filename),as_attachment=True)
-
+    item_list = ''
+    for item in os.listdir('static/pdf_file'):
+        if item.endswith('pdf'):
+            item_list += ("'static/pdf_file/" + item + "' ")
+    os.system('pdftk {} cat output static/merged_file/complete.pdf'.format(item_list))
+    return send_file('static/merged_file/complete.pdf',as_attachment=True)
+    
 
 if __name__ == '__main__':
     if not os.path.exists('db.sqlite'):
