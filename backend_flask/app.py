@@ -14,7 +14,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-
 class Upload(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(50))
@@ -29,18 +28,21 @@ def create_tables():
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        file = request.files['file']
-        upload = Upload(filename=file.filename, data=file.read())
-        db.session.add(upload)
-        db.session.commit()
-        f"Uploaded: {file.filename}"
-        uploaded_files = request.files["file"]
-        uploaded_files.stream.seek(0)
-        uploaded_files.save("static/pdf_file/{}".format(file.filename))
-        os.system('pdfcrop --margins 100 "static/pdf_file/{}" "static/pdf_file/{}"'.format(file.filename, file.filename))
-        #with open("static/pdf_file/{}".format(file.filename), 'wb') as f:
-        #    f.write(uploaded_files)
-        database.save(file.filename)
+        files = request.files.getlist('file')
+        for file in files:
+            filename = file.filename
+            filename.replace(' ', '\ ')
+            upload = Upload(filename=filename, data=file.read())
+            db.session.add(upload)
+            db.session.commit()
+            f"Uploaded: {filename}"
+            #uploaded_files = file #request.files["file"]
+            file.stream.seek(0)
+            file.save("static/pdf_file/{}".format(filename))
+            os.system('pdfcrop --margins 100 "static/pdf_file/{}" "static/pdf_file/{}"'.format(filename, filename))
+            #with open("static/pdf_file/{}".format(file.filename), 'wb') as f:
+            #    f.write(uploaded_files)
+            database.save(filename)
     return render_template('index.html')
 
 
@@ -59,9 +61,17 @@ def upload_done():
 @app.route("/download/<upload_id>/")
 def download(upload_id):
     upload = Upload.query.filter_by(id=upload_id).first()
-    return send_file("static/pdf_file/{}".format(upload.filename))
+    return send_file("static/pdf_file/{}".format(upload.filename),as_attachment=True)
     # return send_file(BytesIO(upload.data), download_name=upload.filename, as_attachment=True)
     # return "pdf_file/{}.pdf".format(upload.filename)
+
+@app.route("/merge/")
+def merge():
+    #upload = Upload.query.filter_by(id=upload_id).first()
+    #os.system('pdf_merge.py --margins 100 "static/pdf_file/{}" "static/pdf_file/{}"'.format(file.filename, file.filename))
+    #os.system('pdftk a.pdf b.pdf cat output c.pdf'.format(file.filename))
+    return render_template("merge.html")
+    # return send_file("static/pdf_file/{}".format(upload.filename),as_attachment=True)
 
 
 if __name__ == '__main__':

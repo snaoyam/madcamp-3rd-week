@@ -682,6 +682,10 @@
                 {% for house in house_list %}<a href={{url_for("download", upload_id=house[0])}}><h2 class="">{{house[1]}}</h2></a>{% endfor %}
                 {% else %}
                 <h2 class="">목록이 없습니다.</h2>{% endif %}
+
+                <form method="POST" action = "/merge" enctype="multipart/form-data">
+                    <button>넘어가기</button>
+                </form>
             </div>
         </article>
     </body>
