@@ -1,12 +1,13 @@
 import React, { useEffect, useState, DragEvent, ChangeEvent } from 'react'
 import { Box } from '@mui/material'
-import { Document, Page } from 'react-pdf'
+import { Document, Page, /*pdfjs*/ } from 'react-pdf';
+//pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-const DragNDrop = () => {
+
+const DragNDrop = ({ sx }: { sx: { width: number | string, height: number | string } }) => {
   const [dragActive, setDragActive] = useState<boolean>(false)
   const fileInputRef = React.useRef<HTMLInputElement | null>(null)
   const [dataTransferList, setDataTransferList] = useState<File[]>([])
-
   const [itemsPerRow, setItemsPerRow] = useState<number>(3)
 
   useEffect(() => {
@@ -49,9 +50,10 @@ const DragNDrop = () => {
     e.preventDefault()
     const { files } = e.target;
     if (files && files.length) {
-      for (let i = 0; i < (fileInputRef.current?.files?.length ?? 0); i++) {
-        setDataTransferList((list) => [...list, fileInputRef.current?.files?.item(i)!])
-      }
+      Array.from(files).forEach(file => {
+        setDataTransferList((list) => [...list, file])
+        //dataTransfer?.items.add(file)
+      })
     }
   }
   /*<Box
@@ -68,9 +70,10 @@ const DragNDrop = () => {
     <Box
       onSubmit={(e) => e.preventDefault()}
       sx={{
-        width: '100%',
-        height: '100%',
+        minHeight: sx.height,
+        width: sx.width,
         padding: '12px',
+        userSelect: 'none',
       }}>
       <Box
         onClick={() => { fileInputRef.current?.click() }}
@@ -81,16 +84,16 @@ const DragNDrop = () => {
         sx={{
           border: '2px dashed rgb(128, 128, 128)',
           width: '100%',
-          height: '100%',
+          minHeight: 'inherit',
           borderRadius: '16px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
         }}>
         <Box sx={{
-          //display: 'none',
+          display: 'none',
         }}>
-          <input ref={fileInputRef} onClick={(e) => { (e.target as HTMLInputElement).value = '' }} type="file" multiple={true} onChange={handleInputChange} />
+          <input ref={fileInputRef} accept="application/pdf" onClick={(e) => { (e.target as HTMLInputElement).value = '' }} type="file" multiple={true} onChange={handleInputChange} />
         </Box>
         <Box sx={{
           display: 'flex',
@@ -101,7 +104,7 @@ const DragNDrop = () => {
         </Box>
         <Box sx={{
           width: '100%',
-          height: '100%',
+          minHeight: 'inherit',
         }}>
           <Box sx={{
             display: 'flex',
@@ -109,9 +112,9 @@ const DragNDrop = () => {
             justifyContent: 'flex-start',
             width: '100%',
           }}>
-            {dataTransferList.map(v => {
+            {dataTransferList.map((v, i) => {
               return (
-                <Box sx={{
+                <Box key={v.name+i} sx={{
                   width: `calc(100% / ${itemsPerRow})`,
                   paddingTop: `calc(120% / ${itemsPerRow})`,
                   position: 'relative',
@@ -123,15 +126,32 @@ const DragNDrop = () => {
                     width: '100%',
                     height: '100%',
                     padding: '10px',
+                    display: 'flex',
+                    alignItems: 'center',
                   }}>
                     <Box sx={{
-                      width: '100%',
-                      height: '100%',
-                      backgroundColor: 'green',
+                      maxWidth: '100%',
+                      maxHeight: '100%',
+                      display: 'flex',
+                      '& div': {
+                        maxWidth: '100% !important',
+                        maxHeight: '100% !important',
+                      },
+                      '& > div': {
+                        display: 'flex',
+                        justifyContent: 'center',
+                      },
+                      '& canvas': {
+                        maxWidth: '100% !important',
+                        maxHeight: '100% !important',
+                        width: 'auto !important',
+                        height: 'auto !important',
+                        margin: 'auto auto',
+                      },
                     }}>
-                      {/*<Document file="somefile.pdf" onLoadSuccess={onDocumentLoadSuccess}>
-                        <Page pageNumber={pageNumber} />
-                      </Document>*/}
+                      <Document file={v} onLoadError={console.error}>
+                        <Page pageNumber={1} height={0} />
+                      </Document>
                     </Box>
                   </Box>
                 </Box>

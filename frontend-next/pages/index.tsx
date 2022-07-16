@@ -11,11 +11,13 @@ const Home: NextPage = () => {
   return (
     <Box
       sx={{
-        width: 500,
         margin: '50px 40px',
         backgroundColor: 'rgb(255, 253, 219)',
       }}>
-      <DragNDrop />
+      <DragNDrop sx={{
+        width: 800,
+        height: 100,
+      }}/>
     </Box>
   )
 }
