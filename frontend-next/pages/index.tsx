@@ -12,7 +12,6 @@ const Home: NextPage = () => {
     <Box
       sx={{
         margin: '50px 40px',
-        backgroundColor: 'rgb(255, 253, 219)',
       }}>
       <DragNDrop sx={{
         width: 800,
