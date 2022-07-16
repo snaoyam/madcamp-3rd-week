@@ -22,10 +22,16 @@
     <div class="center">
         <form method="POST" action = "/" enctype="multipart/form-data">
             <input type="file" name="file" multiple>
+            <p>add padding option</p>
+            <p><input input type="text" placeholder ="left" required name = "left"/></p>
+            <p><input input type="text" placeholder ="top" required name = "top"/></p>
+            <p><input input type="text" placeholder ="right" required name = "right"/></p>
+            <p><input input type="text" placeholder ="bottom" required name = "bottom"/></p>
             <button>Submit</button>
         </form>
+
         <form method="POST" action = "/upload_done" enctype="multipart/form-data">
-            <button>넘어가기</button>
+          <button>넘어가기</button>
         </form>
     </div>
 </body>

@@ -36,20 +36,11 @@ def index():
             db.session.add(upload)
             db.session.commit()
             f"Uploaded: {filename}"
-            #uploaded_files = file #request.files["file"]
             file.stream.seek(0)
             file.save("static/pdf_file/{}".format(filename))
-            os.system('pdfcrop --margins 100 "static/pdf_file/{}" "static/pdf_file/{}"'.format(filename, filename))
-            #with open("static/pdf_file/{}".format(file.filename), 'wb') as f:
-            #    f.write(uploaded_files)
-            database.save(filename)
+            database.save(filename,request.values.to_dict()['left'],request.values.to_dict()['top'],request.values.to_dict()['right'],request.values.to_dict()['bottom'] )
+
     return render_template('index.html')
-
-
-@app.route("/upload_pdf", methods=["POST"])
-def upload_pdf():
-    return render_template('upload_pdf.html')
-
 
 @app.route("/upload_done", methods=["POST"])
 def upload_done():
@@ -58,12 +49,15 @@ def upload_done():
     return render_template("upload_done.html", house_list=house_list, length=length)
 
 
-@app.route("/download/<upload_id>/")
+@app.route("/download/<int:upload_id>/")
 def download(upload_id):
     upload = Upload.query.filter_by(id=upload_id).first()
+    left = database.load_house(upload_id-1)["left"]
+    top = database.load_house(upload_id-1)["top"]
+    right = database.load_house(upload_id-1)["right"]
+    bottom = database.load_house(upload_id-1)["bottom"]
+    os.system('pdfcrop --margins \'{} {} {} {}\' "static/pdf_file/{}" "static/pdf_file/{}"'.format(left, top, right, bottom, upload.filename, upload.filename))
     return send_file("static/pdf_file/{}".format(upload.filename),as_attachment=True)
-    # return send_file(BytesIO(upload.data), download_name=upload.filename, as_attachment=True)
-    # return "pdf_file/{}.pdf".format(upload.filename)
 
 @app.route("/merge")
 def merge():

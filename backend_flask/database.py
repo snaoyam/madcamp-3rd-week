@@ -1,9 +1,13 @@
 import pandas as pd
 
 
-def save(filename):
+def save(filename, left, top, right, bottom):
     idx = len(pd.read_csv("database.csv"))
-    new_df = pd.DataFrame({"filename": filename},
+    new_df = pd.DataFrame({"filename": filename,
+                            "left": left,
+                            "top": top,
+                            "right": right,
+                            "bottom": bottom},
                           index=[idx])
     new_df.to_csv("database.csv", mode="a", header=False)
     return None
