@@ -3,10 +3,14 @@ import app
 import os
 from sklearn.datasets import load_iris
 
-def save(filename, left, top, right, bottom):
+def save(filename, user_id, left, top, right, bottom):
     df = pd.read_csv("database_forPadding.csv")
-    idx = len(df)
+    idx = 0
+    for i in range(len(df)):
+        if (user_id==df.iloc[i]["user_id"]):
+            idx+=1
     new_df = pd.DataFrame({"filename": filename,
+                            "user_id": user_id,
                             "left": left,
                             "top": top,
                             "right": right,
@@ -16,34 +20,45 @@ def save(filename, left, top, right, bottom):
     return None
 
 
-def load_list():
+def load_list(user_id):     # 전체 list load
     house_list = []
     df = pd.read_csv("database_forPadding.csv")
     for i in range(len(df)):
-        tem_item = df.iloc[i].tolist()
-        tem_item[0] += 1
-        house_list.append(tem_item)
-    print(house_list)
+        if (user_id==df.iloc[i]["user_id"]):
+            tem_item = df.iloc[i].tolist()
+            tem_item[0] += 1
+            house_list.append(tem_item)
     return house_list
 
 
-def now_index():
+def now_index(user_id):    # list 길이(size)
     df = pd.read_csv("database_forPadding.csv")
-    return len(df) - 1
+    for i in range(len(df)):
+        if (user_id==df.iloc[i]["user_id"]):
+            length+=1
+    return length
 
 
-def load_house(idx):
+def load_house(idx, user_id):    # 해당 index의 list 반환
     df = pd.read_csv("database_forPadding.csv")
-    house_info = df.iloc[idx]
+    house_info=0
+    k=0
+    for i in range(len(df)):
+        if (user_id==df.iloc[i]["user_id"]):
+            k+=1
+            if(k-1==idx):
+                house_info = df.iloc[i]
     return house_info
 
 
-def string_list(dic, i):    # 파일들의 이름을 나열한 string 반환
+def string_list(dic, i, user_id):    # 파일들의 이름을 나열한 string 반환
     item_list = ''
-    for item in load_list():
-        if(i==-1):
-            app.download_padding_pdf(item[0])
-        item_list += ("'static/{}/".format(dic) + item[1] + "' ")
+    for item in load_list(user_id):
+        if (user_id==df.iloc[i]["user_id"]):
+            if(i==-1):
+                app.download_padding_pdf(item[0])
+            item_list += ("'static/{}/".format(dic) + item[1] + "' ")
+        
     return item_list
 
 
