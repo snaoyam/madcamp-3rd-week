@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload Example</title>
+    <style>
+        body {
+          margin: 0;
+        }
+
+        .center {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+        }
+      </style>
+</head>
+<body>
+    <div class="center">
+        <form method="POST" action = "/index1" enctype="multipart/form-data">
+            <input type="file" name="file" multiple>
+            <p>add padding option</p>
+            <p><input input type="text" placeholder ="left" required name = "left"/></p>
+            <p><input input type="text" placeholder ="top" required name = "top"/></p>
+            <p><input input type="text" placeholder ="right" required name = "right"/></p>
+            <p><input input type="text" placeholder ="bottom" required name = "bottom"/></p>
+            <button>Submit</button>
+        </form>
+
+        <form method="POST" action = "/upload_done1" enctype="multipart/form-data">
+          <button>넘어가기</button>
+        </form>
+    </div>
+</body>
+</html>
