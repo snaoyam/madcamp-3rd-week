@@ -8,10 +8,12 @@ type pdfPageState = { pdfDimension: { width: number[], height: number[] }, numPa
 class PdfRender extends React.PureComponent<pdfPageProps, pdfPageState> {
   file: File
   itemsPerRow: number
+  HeightL: boolean
   constructor(props: { key: string, file: File, itemsPerRow: number }) {
     super(props)
     this.file = props.file
     this.itemsPerRow = props.itemsPerRow
+    this.HeightL = false
     this.state = {
       pdfDimension: { width: [], height: [] },
       numPages: 1,
@@ -21,9 +23,8 @@ class PdfRender extends React.PureComponent<pdfPageProps, pdfPageState> {
   }
 
   overflowBound(pagenum: number): number[] {
-    //((this.state.pdfDimension.width.length != 0 && this.state.pdfDimension.height.length != 0 && (this.state.pdfDimension.height.reduce((v, c) => v + c) > this.state.pdfDimension.width.reduce((v, c) => v + c))) ? 1 : 0)
-    const bound: number = pagenum > 3 * (this.itemsPerRow + ((this.state.pdfDimension.width.length != 0 && this.state.pdfDimension.height.length != 0 && (this.state.pdfDimension.height.reduce((v, c) => v + c) > this.state.pdfDimension.width.reduce((v, c) => v + c))) ? 1 : 0)) ? 3 * (this.itemsPerRow + ((this.state.pdfDimension.width.length != 0 && this.state.pdfDimension.height.length != 0 && (this.state.pdfDimension.height.reduce((v, c) => v + c) > this.state.pdfDimension.width.reduce((v, c) => v + c))) ? 1 : 0)) : pagenum
-    return [bound, pagenum - bound > 3 ? 3 : (pagenum > bound ? pagenum - bound : 0)]
+    const bound: number = pagenum > (this.HeightL ? 2 : 3) * (this.itemsPerRow + (this.HeightL ? 1 : 0)) ? (this.HeightL ? 2 : 3) * (this.itemsPerRow + (this.HeightL ? 1 : 0)) : pagenum
+    return [bound, pagenum - bound > (this.HeightL ? 2 : 3) ? (this.HeightL ? 2 : 3) : (pagenum > bound ? pagenum - bound : 0)]
   }
 
   render(): JSX.Element {
@@ -56,9 +57,9 @@ class PdfRender extends React.PureComponent<pdfPageProps, pdfPageState> {
             {Array.from({ length: this.state.expanded ? this.state.numPages : this.overflowBound(this.state.numPages)[0] }, (_, i) => i + 1).map(pageindex => {
               return (
                 <Box sx={{
-                  width: `calc(100% / ${(this.itemsPerRow + ((this.state.pdfDimension.width.length != 0 && this.state.pdfDimension.height.length != 0 && (this.state.pdfDimension.height.reduce((v, c) => v + c) > this.state.pdfDimension.width.reduce((v, c) => v + c))) ? 1 : 0))})`,
+                  width: `calc(100% / ${this.itemsPerRow + (this.HeightL ? 1 : 0)})`,
                   paddingTop: `calc(100% * ${(this.state.pdfDimension.width.length == 0 || this.state.pdfDimension.height.length == 0) ? 1
-                    : (this.state.pdfDimension.height.reduce((v, c) => v + c) / this.state.pdfDimension.height.length) / (this.state.pdfDimension.width.reduce((v, c) => v + c) / this.state.pdfDimension.width.length)} / ${(this.itemsPerRow + ((this.state.pdfDimension.width.length != 0 && this.state.pdfDimension.height.length != 0 && (this.state.pdfDimension.height.reduce((v, c) => v + c) > this.state.pdfDimension.width.reduce((v, c) => v + c))) ? 1 : 0)) })`,
+                    : (this.state.pdfDimension.height.reduce((v, c) => v + c) / this.state.pdfDimension.height.length) / (this.state.pdfDimension.width.reduce((v, c) => v + c) / this.state.pdfDimension.width.length)} / ${this.itemsPerRow + (this.HeightL ? 1 : 0)})`,
                   transition: 'padding-top .3s linear',
                   position: 'relative',
                   height: 0,
@@ -104,6 +105,7 @@ class PdfRender extends React.PureComponent<pdfPageProps, pdfPageState> {
                       }}>
                       <Page pageNumber={pageindex} height={0} onLoadSuccess={(e) => {
                         this.setState((state: Readonly<pdfPageState>) => {
+                          this.HeightL = ([...state.pdfDimension.height, e.height].reduce((v, c) => v + c) > [...state.pdfDimension.width, e.width].reduce((v, c) => v + c))
                           return { ...state, pdfDimension: { width: [...state.pdfDimension.width, e.width], height: [...state.pdfDimension.height, e.height] } }
                         })
                       }} />
@@ -116,9 +118,9 @@ class PdfRender extends React.PureComponent<pdfPageProps, pdfPageState> {
               return (
                 <Box
                   sx={{
-                    width: `calc(100% / ${(this.itemsPerRow + ((this.state.pdfDimension.width.length != 0 && this.state.pdfDimension.height.length != 0 && (this.state.pdfDimension.height.reduce((v, c) => v + c) > this.state.pdfDimension.width.reduce((v, c) => v + c))) ? 1 : 0)) })`,
+                    width: `calc(100% / ${this.itemsPerRow + (this.HeightL ? 1 : 0)})`,
                     paddingTop: `calc(100% * ${(this.state.pdfDimension.width.length == 0 || this.state.pdfDimension.height.length == 0) ? 1
-                      : (this.state.pdfDimension.height.reduce((v, c) => v + c) / this.state.pdfDimension.height.length) / (this.state.pdfDimension.width.reduce((v, c) => v + c) / this.state.pdfDimension.width.length)} / ${(this.itemsPerRow + ((this.state.pdfDimension.width.length != 0 && this.state.pdfDimension.height.length != 0 && (this.state.pdfDimension.height.reduce((v, c) => v + c) > this.state.pdfDimension.width.reduce((v, c) => v + c))) ? 1 : 0)) })`,
+                      : (this.state.pdfDimension.height.reduce((v, c) => v + c) / this.state.pdfDimension.height.length) / (this.state.pdfDimension.width.reduce((v, c) => v + c) / this.state.pdfDimension.width.length)} / ${this.itemsPerRow + (this.HeightL ? 1 : 0)})`,
                     transition: 'padding-top .3s linear',
                     position: 'absolute',
                     bottom: 0,
@@ -168,6 +170,7 @@ class PdfRender extends React.PureComponent<pdfPageProps, pdfPageState> {
                       }}>
                       <Page pageNumber={this.overflowBound(this.state.numPages)[0]} height={0} onLoadSuccess={(e) => {
                         this.setState((state: Readonly<pdfPageState>) => {
+                          this.HeightL = ([...state.pdfDimension.height, e.height].reduce((v, c) => v + c) > [...state.pdfDimension.width, e.width].reduce((v, c) => v + c))
                           return { ...state, pdfDimension: { width: [...state.pdfDimension.width, e.width], height: [...state.pdfDimension.height, e.height] } }
                         })
                       }} />
