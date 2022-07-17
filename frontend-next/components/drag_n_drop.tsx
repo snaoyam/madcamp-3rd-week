@@ -10,7 +10,7 @@ const DragNDrop = ({ sx }: { sx: { width: number | string, height: number | stri
   const [dragActive, setDragActive] = useState<boolean>(false)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [dataTransferList, setDataTransferList] = useState<File[]>([])
-  const [itemsPerRow, setItemsPerRow] = useState<number>(3)
+  const [itemsPerRow, setItemsPerRow] = useState<number>(4)
   //const [pdfHeight, setPdfHeight] = useState<number[]>([1])
   //const [pdfWidth, setPdfWidth] = useState<number[]>([1])
   //const [pdfDimension, setPdfDimension] = useState<{ width: number[], height: number[] }>({ width: [], height: [] })
@@ -89,7 +89,7 @@ const DragNDrop = ({ sx }: { sx: { width: number | string, height: number | stri
         onDrop={handleDrop}
         sx={{
           border: '2px dashed rgb(128, 128, 128)',
-          padding: '5px',
+          padding: '0px',
           width: '100%',
           minHeight: 'inherit',
           borderRadius: '16px',
@@ -113,21 +113,11 @@ const DragNDrop = ({ sx }: { sx: { width: number | string, height: number | stri
           width: '100%',
           minHeight: 'inherit',
         }}>
-          <Box sx={{
-            width: '100%',
-            '& > div': {
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'flex-start',
-              width: '100%',
-            }
-          }}>
-            {dataTransferList.map((file, index) => {
-              return (
-                <PdfRender key={file.name + index} file={file} itemsPerRow={itemsPerRow}/>
-              )
-            })}
-          </Box>
+          {dataTransferList.map((file, index) => {
+            return (
+              <PdfRender key={file.name + index} file={file} itemsPerRow={itemsPerRow}/>
+            )
+          })}
         </Box>
       </Box>
     </Box>
