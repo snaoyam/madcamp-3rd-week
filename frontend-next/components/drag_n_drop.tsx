@@ -1,5 +1,5 @@
 import React, { useEffect, useState, DragEvent, ChangeEvent, useRef } from 'react'
-import { Box, IconButton } from '@mui/material'
+import { Box, ButtonBase } from '@mui/material'
 import PdfRender from './pdf_render'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 //import { Document, Page, /*pdfjs*/ } from 'react-pdf'
@@ -9,7 +9,8 @@ import ClearIcon from '@mui/icons-material/Clear'
 const DragNDrop = ({ sx, itemsPerRow }: { sx: { width: number | string, height: number | string }, itemsPerRow: number }) => {
   const [dragActive, setDragActive] = useState<boolean>(false)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
-  const [dataTransferList, setDataTransferList] = useState<{file: File, index: number}[]>([])
+  const [dataTransferList, setDataTransferList] = useState<{ file: File, index: number }[]>([])
+  const dataFileCounter = useRef<number>(0)
   //const [pdfHeight, setPdfHeight] = useState<number[]>([1])
   //const [pdfWidth, setPdfWidth] = useState<number[]>([1])
   //const [pdfDimension, setPdfDimension] = useState<{ width: number[], height: number[] }>({ width: [], height: [] })
@@ -22,7 +23,7 @@ const DragNDrop = ({ sx, itemsPerRow }: { sx: { width: number | string, height: 
   useEffect(() => {
     const dataTransfer = new DataTransfer()
     dataTransferList.forEach(file => {
-      dataTransfer.items.add((file.file ?? {name: null}))
+      dataTransfer.items.add((file.file ?? { name: null }))
     })
     if (fileInputRef.current) {
       fileInputRef.current.files = dataTransfer.files
@@ -49,7 +50,7 @@ const DragNDrop = ({ sx, itemsPerRow }: { sx: { width: number | string, height: 
     if (files && files.length) {
       Array.from(files).forEach(file => {
         if (file.type == 'application/pdf') { //! alert when not pdf
-          setDataTransferList((list) => [...list, { file: file, index: list.length }])
+          setDataTransferList((list) => [...list, { file: file, index: dataFileCounter.current++ }])
         }
       })
     }
@@ -61,7 +62,7 @@ const DragNDrop = ({ sx, itemsPerRow }: { sx: { width: number | string, height: 
     if (files && files.length) {
       Array.from(files).forEach(file => {
         if (file.type == 'application/pdf') { //! alert when not pdf
-          setDataTransferList((list) => [...list, { file: file, index: list.length }])
+          setDataTransferList((list) => [...list, { file: file, index: dataFileCounter.current++ }])
         }
       })
     }
@@ -142,10 +143,13 @@ const DragNDrop = ({ sx, itemsPerRow }: { sx: { width: number | string, height: 
                 <Box ref={provided.innerRef} {...provided.droppableProps}>
                   {dataTransferList.map((file, index) => {
                     return (
-                      <Draggable key={(file.file ?? {name: null}).name + file.index} draggableId={(file.file ?? {name: null}).name + file.index} index={index}>
+                      <Draggable key={(file.file ?? { name: null }).name + file.index} draggableId={(file.file ?? { name: null }).name + file.index} index={index}>
                         {(provided, snapshot) => (
                           <Box ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                            <PdfRender id={(file.file ?? {name: null}).name + file.index} file={(file.file ?? {name: null})} itemsPerRow={itemsPerRow} />
+                            <PdfRender
+                              id={(file.file ?? { name: null }).name + file.index}
+                              file={file}
+                              itemsPerRow={itemsPerRow} setDataTransferList={setDataTransferList}/>
                           </Box>
                         )}
                       </Draggable>
