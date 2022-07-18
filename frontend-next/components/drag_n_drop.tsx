@@ -9,7 +9,7 @@ import ClearIcon from '@mui/icons-material/Clear'
 const DragNDrop = ({ sx, itemsPerRow }: { sx: { width: number | string, height: number | string }, itemsPerRow: number }) => {
   const [dragActive, setDragActive] = useState<boolean>(false)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
-  const [dataTransferList, setDataTransferList] = useState<File[]>([])
+  const [dataTransferList, setDataTransferList] = useState<{file: File, index: number}[]>([])
   //const [pdfHeight, setPdfHeight] = useState<number[]>([1])
   //const [pdfWidth, setPdfWidth] = useState<number[]>([1])
   //const [pdfDimension, setPdfDimension] = useState<{ width: number[], height: number[] }>({ width: [], height: [] })
@@ -22,7 +22,7 @@ const DragNDrop = ({ sx, itemsPerRow }: { sx: { width: number | string, height: 
   useEffect(() => {
     const dataTransfer = new DataTransfer()
     dataTransferList.forEach(file => {
-      dataTransfer.items.add(file)
+      dataTransfer.items.add((file.file ?? {name: null}))
     })
     if (fileInputRef.current) {
       fileInputRef.current.files = dataTransfer.files
@@ -49,7 +49,7 @@ const DragNDrop = ({ sx, itemsPerRow }: { sx: { width: number | string, height: 
     if (files && files.length) {
       Array.from(files).forEach(file => {
         if (file.type == 'application/pdf') { //! alert when not pdf
-          setDataTransferList((list) => [...list, file])
+          setDataTransferList((list) => [...list, { file: file, index: list.length }])
         }
       })
     }
@@ -61,13 +61,13 @@ const DragNDrop = ({ sx, itemsPerRow }: { sx: { width: number | string, height: 
     if (files && files.length) {
       Array.from(files).forEach(file => {
         if (file.type == 'application/pdf') { //! alert when not pdf
-          setDataTransferList((list) => [...list, file])
+          setDataTransferList((list) => [...list, { file: file, index: list.length }])
         }
       })
     }
   }
 
-  const reorder = (list: File[], startIndex: number, endIndex: number) => {
+  const reorder = (list: { file: File, index: number }[], startIndex: number, endIndex: number) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
@@ -142,10 +142,10 @@ const DragNDrop = ({ sx, itemsPerRow }: { sx: { width: number | string, height: 
                 <Box ref={provided.innerRef} {...provided.droppableProps}>
                   {dataTransferList.map((file, index) => {
                     return (
-                      <Draggable key={file.name + index} draggableId={file.name + index} index={index}>
+                      <Draggable key={(file.file ?? {name: null}).name + file.index} draggableId={(file.file ?? {name: null}).name + file.index} index={index}>
                         {(provided, snapshot) => (
                           <Box ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                            <PdfRender id={file.name + index} file={file} itemsPerRow={itemsPerRow} />
+                            <PdfRender id={(file.file ?? {name: null}).name + file.index} file={(file.file ?? {name: null})} itemsPerRow={itemsPerRow} />
                           </Box>
                         )}
                       </Draggable>

@@ -24,6 +24,7 @@ class PdfRender extends React.Component<pdfPageProps, pdfPageState> {
   }
 
   shouldComponentUpdate(nextProps: pdfPageProps, nextState: pdfPageState) {
+    if (this.state !== nextState) console.log(this.state, nextState)
     this.itemsPerRow = nextProps.itemsPerRow
     return (
       this.props.itemsPerRow !== nextProps.itemsPerRow || this.state !== nextState
