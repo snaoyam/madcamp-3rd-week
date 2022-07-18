@@ -6,7 +6,6 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 //pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 import ClearIcon from '@mui/icons-material/Clear'
 
-
 const DragNDrop = ({ sx, itemsPerRow }: { sx: { width: number | string, height: number | string }, itemsPerRow: number }) => {
   const [dragActive, setDragActive] = useState<boolean>(false)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
@@ -14,6 +13,11 @@ const DragNDrop = ({ sx, itemsPerRow }: { sx: { width: number | string, height: 
   //const [pdfHeight, setPdfHeight] = useState<number[]>([1])
   //const [pdfWidth, setPdfWidth] = useState<number[]>([1])
   //const [pdfDimension, setPdfDimension] = useState<{ width: number[], height: number[] }>({ width: [], height: [] })
+
+  const [isBrowser, setIsBrowser] = useState(false)
+  useEffect(() => {
+    setIsBrowser(typeof window == "object")
+  }, [])
 
   useEffect(() => {
     const dataTransfer = new DataTransfer()
@@ -62,6 +66,25 @@ const DragNDrop = ({ sx, itemsPerRow }: { sx: { width: number | string, height: 
       })
     }
   }
+
+  const reorder = (list: File[], startIndex: number, endIndex: number) => {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+
+    return result;
+  }
+
+  const onDragEnd = (result: any) => {
+    if (!result.destination) {
+      return;
+    }
+    setDataTransferList(v => reorder(
+      v,
+      result.source.index,
+      result.destination.index,
+    ))
+  }
   /*<Box
     className={dragActive ? "drag-active" : ""}
     sx={{
@@ -82,7 +105,7 @@ const DragNDrop = ({ sx, itemsPerRow }: { sx: { width: number | string, height: 
         userSelect: 'none',
       }}>
       <Box
-        onClick={() => { fileInputRef.current?.click() }}
+        /*onClick={() => { fileInputRef.current?.click() }}*/
         onDragOver={(e) => { e.preventDefault() }}
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
@@ -113,11 +136,26 @@ const DragNDrop = ({ sx, itemsPerRow }: { sx: { width: number | string, height: 
           width: '100%',
           minHeight: 'inherit',
         }}>
-          {dataTransferList.map((file, index) => {
-            return (
-              <PdfRender key={file.name + index} file={file} itemsPerRow={itemsPerRow}/>
-            )
-          })}
+          {isBrowser ? <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="droppable">
+              {(provided, snapshot) => (
+                <Box ref={provided.innerRef} {...provided.droppableProps}>
+                  {dataTransferList.map((file, index) => {
+                    return (
+                      <Draggable key={file.name + index} draggableId={file.name + index} index={index}>
+                        {(provided, snapshot) => (
+                          <Box ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                            <PdfRender id={file.name + index} file={file} itemsPerRow={itemsPerRow} />
+                          </Box>
+                        )}
+                      </Draggable>
+                    )
+                  })}
+                  {provided.placeholder}
+                </Box>
+              )}
+            </Droppable>
+          </DragDropContext> : null}
         </Box>
       </Box>
     </Box>

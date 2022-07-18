@@ -2,18 +2,20 @@ import React, { useEffect, useState, DragEvent, ChangeEvent, useRef } from 'reac
 import { Box, IconButton } from '@mui/material'
 import { Document, Page, /*pdfjs*/ } from 'react-pdf'
 
-type pdfPageProps = { file: File, itemsPerRow: number }
+type pdfPageProps = { file: File, itemsPerRow: number, id: string }
 type pdfPageState = { pdfDimension: { width: number[], height: number[] }, numPages: number, expanded: boolean }
 
 class PdfRender extends React.Component<pdfPageProps, pdfPageState> {
   file: File
   HeightL: boolean
   itemsPerRow: number
+  id: string
   constructor(props: pdfPageProps, state: pdfPageState) {
     super(props)
     this.file = props.file
     this.HeightL = false
     this.itemsPerRow = props.itemsPerRow
+    this.id = props.id
     this.state = {
       pdfDimension: { width: [], height: [] },
       numPages: 1,
@@ -35,7 +37,7 @@ class PdfRender extends React.Component<pdfPageProps, pdfPageState> {
 
   render(): JSX.Element {
     return (
-      <Box onClick={() => {
+      <Box id={this.id} onClick={() => {
         this.setState((state) => {
           return { ...state, expanded: !this.state.expanded }
         })
