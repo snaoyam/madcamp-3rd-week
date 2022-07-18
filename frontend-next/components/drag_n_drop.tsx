@@ -1,16 +1,16 @@
 import React, { useEffect, useState, DragEvent, ChangeEvent, useRef } from 'react'
 import { Box, IconButton } from '@mui/material'
 import PdfRender from './pdf_render'
-//import { Document, Page, /*pdfjs*/ } from 'react-pdf';
-//pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
+//import { Document, Page, /*pdfjs*/ } from 'react-pdf'
+//pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 import ClearIcon from '@mui/icons-material/Clear'
 
 
-const DragNDrop = ({ sx }: { sx: { width: number | string, height: number | string } }) => {
+const DragNDrop = ({ sx, itemsPerRow }: { sx: { width: number | string, height: number | string }, itemsPerRow: number }) => {
   const [dragActive, setDragActive] = useState<boolean>(false)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [dataTransferList, setDataTransferList] = useState<File[]>([])
-  const [itemsPerRow, setItemsPerRow] = useState<number>(3)
   //const [pdfHeight, setPdfHeight] = useState<number[]>([1])
   //const [pdfWidth, setPdfWidth] = useState<number[]>([1])
   //const [pdfDimension, setPdfDimension] = useState<{ width: number[], height: number[] }>({ width: [], height: [] })
@@ -53,7 +53,7 @@ const DragNDrop = ({ sx }: { sx: { width: number | string, height: number | stri
 
   const handleInputChange = function (e: ChangeEvent<HTMLInputElement>) {
     e.preventDefault()
-    const { files } = e.target;
+    const { files } = e.target
     if (files && files.length) {
       Array.from(files).forEach(file => {
         if (file.type == 'application/pdf') { //! alert when not pdf

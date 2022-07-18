@@ -5,21 +5,27 @@ import { Document, Page, /*pdfjs*/ } from 'react-pdf'
 type pdfPageProps = { file: File, itemsPerRow: number }
 type pdfPageState = { pdfDimension: { width: number[], height: number[] }, numPages: number, expanded: boolean }
 
-class PdfRender extends React.PureComponent<pdfPageProps, pdfPageState> {
+class PdfRender extends React.Component<pdfPageProps, pdfPageState> {
   file: File
-  itemsPerRow: number
   HeightL: boolean
-  constructor(props: { key: string, file: File, itemsPerRow: number }) {
+  itemsPerRow: number
+  constructor(props: pdfPageProps, state: pdfPageState) {
     super(props)
     this.file = props.file
-    this.itemsPerRow = props.itemsPerRow
     this.HeightL = false
+    this.itemsPerRow = props.itemsPerRow
     this.state = {
       pdfDimension: { width: [], height: [] },
       numPages: 1,
       expanded: false,
     }
-    //{ pdfDimension:  }
+  }
+
+  shouldComponentUpdate(nextProps: pdfPageProps, nextState: pdfPageState) {
+    this.itemsPerRow = nextProps.itemsPerRow
+    return (
+      this.props.itemsPerRow !== nextProps.itemsPerRow || this.state !== nextState
+    )
   }
 
   overflowBound(pagenum: number): number[] {
@@ -31,12 +37,12 @@ class PdfRender extends React.PureComponent<pdfPageProps, pdfPageState> {
     return (
       <Box onClick={() => {
         this.setState((state) => {
-          return {...state, expanded: !this.state.expanded}
+          return { ...state, expanded: !this.state.expanded }
         })
       }}
         sx={{
-        padding: '8px',
-      }}>
+          padding: '8px',
+        }}>
         <Box sx={{
           backgroundColor: 'rgb(100 100 100 / 10%)',
           borderRadius: '8px',
@@ -56,14 +62,16 @@ class PdfRender extends React.PureComponent<pdfPageProps, pdfPageState> {
           })}>
             {Array.from({ length: this.state.expanded ? this.state.numPages : this.overflowBound(this.state.numPages)[0] }, (_, i) => i + 1).map(pageindex => {
               return (
-                <Box sx={{
-                  width: `calc(100% / ${this.itemsPerRow + (this.HeightL ? 1 : 0)})`,
-                  paddingTop: `calc(100% * ${(this.state.pdfDimension.width.length == 0 || this.state.pdfDimension.height.length == 0) ? 1
-                    : (this.state.pdfDimension.height.reduce((v, c) => v + c) / this.state.pdfDimension.height.length) / (this.state.pdfDimension.width.reduce((v, c) => v + c) / this.state.pdfDimension.width.length)} / ${this.itemsPerRow + (this.HeightL ? 1 : 0)})`,
-                  transition: 'padding-top .3s linear',
-                  position: 'relative',
-                  height: 0,
-                }}>
+                <Box
+                  key={pageindex}
+                  sx={{
+                    width: `calc(100% / ${this.itemsPerRow + (this.HeightL ? 1 : 0)})`,
+                    paddingTop: `calc(100% * ${(this.state.pdfDimension.width.length == 0 || this.state.pdfDimension.height.length == 0) ? 1
+                      : (this.state.pdfDimension.height.reduce((v, c) => v + c) / this.state.pdfDimension.height.length) / (this.state.pdfDimension.width.reduce((v, c) => v + c) / this.state.pdfDimension.width.length)} / ${this.itemsPerRow + (this.HeightL ? 1 : 0)})`,
+                    transition: 'padding-top .3s linear',
+                    position: 'relative',
+                    height: 0,
+                  }}>
                   <Box sx={{
                     position: 'absolute',
                     top: 0,
@@ -117,6 +125,7 @@ class PdfRender extends React.PureComponent<pdfPageProps, pdfPageState> {
             {Array.from({ length: (this.state.expanded ? 0 : this.overflowBound(this.state.numPages)[1]) }, (_, i) => i + 1).map(pageindex => {
               return (
                 <Box
+                  key={pageindex + this.overflowBound(this.state.numPages)[0]}
                   sx={{
                     width: `calc(100% / ${this.itemsPerRow + (this.HeightL ? 1 : 0)})`,
                     paddingTop: `calc(100% * ${(this.state.pdfDimension.width.length == 0 || this.state.pdfDimension.height.length == 0) ? 1
