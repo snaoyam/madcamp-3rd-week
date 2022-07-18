@@ -1,6 +1,6 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
-import Appbar from '../components/appbar'
+import Appbar from '../components/topbar'
 import React from 'react'
 import Head from 'next/head'
 

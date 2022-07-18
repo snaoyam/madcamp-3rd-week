@@ -1,14 +1,13 @@
 import React, { useEffect, useState, DragEvent, ChangeEvent, useRef } from 'react'
-import { Box, ButtonBase } from '@mui/material'
+import { Box } from '@mui/material'
 import PdfRender from './pdf_render'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 //import { Document, Page, /*pdfjs*/ } from 'react-pdf'
 //pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 import ClearIcon from '@mui/icons-material/Clear'
 
-const DragNDrop = ({ sx, itemsPerRow }: { sx: { width: number | string, height: number | string }, itemsPerRow: number }) => {
+const DragNDrop = ({ sx, itemsPerRow, fileInputRef, margin }: { sx: { width: number | string, height: number | string }, itemsPerRow: number, fileInputRef: React.MutableRefObject<HTMLInputElement | null>, margin: { left: number, top: number, right: number, bottom: number } }) => {
   const [dragActive, setDragActive] = useState<boolean>(false)
-  const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [dataTransferList, setDataTransferList] = useState<{ file: File, index: number }[]>([])
   const dataFileCounter = useRef<number>(0)
   //const [pdfHeight, setPdfHeight] = useState<number[]>([1])
@@ -102,7 +101,6 @@ const DragNDrop = ({ sx, itemsPerRow }: { sx: { width: number | string, height: 
       sx={{
         minHeight: sx.height,
         width: sx.width,
-        padding: '12px',
         userSelect: 'none',
       }}>
       <Box
@@ -120,6 +118,7 @@ const DragNDrop = ({ sx, itemsPerRow }: { sx: { width: number | string, height: 
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          position: 'relative',
         }}>
         <Box sx={{
           display: 'none',
@@ -127,15 +126,20 @@ const DragNDrop = ({ sx, itemsPerRow }: { sx: { width: number | string, height: 
           <input ref={fileInputRef} accept="application/pdf" onClick={(e) => { (e.target as HTMLInputElement).value = '' }} type="file" multiple={true} onChange={handleInputChange} />
         </Box>
         <Box sx={{
-          display: 'flex',
-          flexDirection: 'column',
+          display: dataTransferList.length == 0 ? 'flex' : 'none',
+          justifyContent: 'center',
           alignItems: 'center',
+          width: '100%',
+          position: 'absolute',
         }}>
-
+          Drop your PDF files Here to add Margin
         </Box>
         <Box sx={{
           width: '100%',
           minHeight: 'inherit',
+          '& > div': {
+            paddingBottom: '4px',
+          }
         }}>
           {isBrowser ? <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="droppable">
@@ -149,6 +153,7 @@ const DragNDrop = ({ sx, itemsPerRow }: { sx: { width: number | string, height: 
                             <PdfRender
                               id={(file.file ?? { name: null }).name + file.index}
                               file={file}
+                              margin={margin}
                               itemsPerRow={itemsPerRow} setDataTransferList={setDataTransferList}/>
                           </Box>
                         )}

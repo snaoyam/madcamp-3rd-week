@@ -1,8 +1,14 @@
 import React, { useEffect, useState, DragEvent, ChangeEvent, useRef, ReactElement } from 'react'
-import { Box, ButtonBase } from '@mui/material'
+import { Box, ButtonBase } from '@mui/material' //!Grow
 import { Document, Page, /*pdfjs*/ } from 'react-pdf'
 
-type pdfPageProps = { file: { file: File, index: number }, itemsPerRow: number, id: string, setDataTransferList: React.Dispatch<React.SetStateAction<{ file: File, index: number }[]>> }
+type pdfPageProps = { 
+  file: { file: File, index: number }, 
+  itemsPerRow: number, 
+  id: string, 
+  setDataTransferList: React.Dispatch<React.SetStateAction<{ file: File, index: number }[]>>, 
+  margin: { left: number, top: number, right: number, bottom: number },
+}
 type pdfPageState = { pdfDimension: { width: number[], height: number[] }, numPages: number, expanded: boolean }
 
 class PdfRender extends React.Component<pdfPageProps, pdfPageState> {
@@ -10,12 +16,14 @@ class PdfRender extends React.Component<pdfPageProps, pdfPageState> {
   HeightL: boolean
   itemsPerRow: number
   id: string
+  pdfDimensionIndexed: { index: number, width: number, height: number }[]
   constructor(props: pdfPageProps, state: pdfPageState) {
     super(props)
     this.file = props.file
     this.HeightL = false
     this.itemsPerRow = props.itemsPerRow
     this.id = props.id
+    this.pdfDimensionIndexed = []
     this.state = {
       pdfDimension: { width: [], height: [] },
       numPages: 1,
@@ -41,22 +49,22 @@ class PdfRender extends React.Component<pdfPageProps, pdfPageState> {
         <Box sx={{
           display: 'flex',
           justifyContent: 'end',
-          padding: '0 8px',
+          padding: '4px 8px 0 8px',
         }}>
-          <ButtonBase onClick={() => {
+          {this.overflowBound(this.state.numPages)[1] !== 0 ? <ButtonBase onClick={() => {
             this.setState((state) => {
               return { ...state, expanded: !this.state.expanded }
             })
-          }} sx={{ textTransform: 'unset', color: '#adadad', borderRadius: '4px', padding: '3px 4px' }}>{this.state.expanded ? 'Collapse Pages' : 'Expand Pages'}</ButtonBase>
+          }} sx={{ textTransform: 'unset', color: '#adadad', borderRadius: '4px', padding: '3px 4px' }}>{this.state.expanded ? 'Collapse Pages' : 'Expand Pages'}</ButtonBase> : null}
           <ButtonBase onClick={() => {
             this.props.setDataTransferList(v => {
               return v.filter(v => v != this.file)
             })
-          }} sx={{ textTransform: 'unset', color: '#e76464', borderRadius: '4px', padding: '3px 4px' }}>Delete File</ButtonBase>
+          }} sx={{ textTransform: 'unset', color: '#e76464', borderRadius: '4px 8px 4px 4px', padding: '3px 4px' }}>Delete File</ButtonBase>
         </Box>
         <Box id={this.id}
           sx={{
-            padding: '0 8px 8px 8px',
+            padding: '0 8px 4px 8px',
           }}>
           <Box sx={{
             backgroundColor: 'rgb(100 100 100 / 10%)',
@@ -92,7 +100,7 @@ class PdfRender extends React.Component<pdfPageProps, pdfPageState> {
                       top: 0,
                       width: '100%',
                       height: '100%',
-                      padding: '5px',
+                      padding: 'min(5px, 2%)',
                       display: 'flex',
                       alignItems: 'center',
                     }}>
@@ -124,11 +132,18 @@ class PdfRender extends React.Component<pdfPageProps, pdfPageState> {
                             transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
                             backgroundColor: 'white',
                             color: 'white',
+                            padding: `${(e => {
+                              if(e)
+                                return (this.props.margin.left * 100 / e.width) * (e.height > e.width ?  : )
+                              else
+                                return 0
+                            })(this.pdfDimensionIndexed.find(e => e.index == pageindex))}px 10 10 10`, //this.props.margin.top * 37.795
                           },
                         }}>
                         <Page pageNumber={pageindex} height={0} onLoadSuccess={(e) => {
                           this.setState((state: Readonly<pdfPageState>) => {
                             this.HeightL = ([...state.pdfDimension.height, e.height].reduce((v, c) => v + c) > [...state.pdfDimension.width, e.width].reduce((v, c) => v + c))
+                            this.pdfDimensionIndexed.push({ index: pageindex , width: e.width, height: e.height})
                             return { ...state, pdfDimension: { width: [...state.pdfDimension.width, e.width], height: [...state.pdfDimension.height, e.height] } }
                           })
                         }} />
@@ -158,7 +173,7 @@ class PdfRender extends React.Component<pdfPageProps, pdfPageState> {
                       top: 0,
                       width: '100%',
                       height: '100%',
-                      padding: '5px',
+                      padding: 'min(5px, 2%)',
                       display: 'flex',
                       alignItems: 'center',
                     }}>
