@@ -105,6 +105,7 @@ class SideBar extends React.PureComponent<sideBarProps, sideBarState> {
               endIcon={this.state.loading ? <CircularProgress size={20} sx={{color: 'white'}}/> : <SendIcon />}
               onClick={() => {
                 if(this.props.dataTransferList.length > 0) {
+                  this.props.serialNumber.current = Math.floor(100000000 + Math.random() * 900000000)
                   this.setState(state => {
                     return { ...state, loading: true }
                   })
@@ -112,7 +113,7 @@ class SideBar extends React.PureComponent<sideBarProps, sideBarState> {
                   this.props.dataTransferList.forEach(file => {
                     dataTransfer.items.add((file.file ?? { name: null }))
                   })
-                  Axios.postForm('/merge', {
+                  Axios.postForm('http://192.249.18.169/merge', {
                     'filecount': dataTransfer.files.length,
                     'files[]': dataTransfer.files,
                     'id': this.props.serialNumber.current,
@@ -141,7 +142,7 @@ class SideBar extends React.PureComponent<sideBarProps, sideBarState> {
                 textAlign: 'center',
                 fontSize: 'calc(0.1vw + 12px)'
               }}>
-              Merge PDF
+              Create Link
             </Button>
           </Box>
         </Box>

@@ -14,7 +14,7 @@ const Home: NextPage = () => {
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [dataTransferList, setDataTransferList] = useState<{ file: File, index: number }[]>([])
   const [margin, setMargin] = useState<{ left: number, top: number, right: number, bottom: number }>({left: 0, top: 0, right: 0, bottom: 0})
-  const serialNumber = useRef<number>(Math.floor(100000000 + Math.random() * 900000000))
+  const serialNumber = useRef<number>(0)
 
   useEffect(() => {
     console.log(itemsPerRow)
