@@ -1,6 +1,7 @@
 import React, { useEffect, useState, DragEvent, ChangeEvent, useRef, ReactElement } from 'react'
 import { Box, ButtonBase } from '@mui/material' //!Grow
 import { Document, Page, /*pdfjs*/ } from 'react-pdf'
+import { ThirtyFpsSharp, ThreeSixty } from '@mui/icons-material'
 
 type pdfPageProps = { 
   file: { file: File, index: number }, 
@@ -16,6 +17,7 @@ class PdfRender extends React.Component<pdfPageProps, pdfPageState> {
   HeightL: boolean
   itemsPerRow: number
   id: string
+  margin: { left: number, top: number, right: number, bottom: number }
   pdfDimensionIndexed: { index: number, width: number, height: number }[]
   constructor(props: pdfPageProps, state: pdfPageState) {
     super(props)
@@ -24,6 +26,7 @@ class PdfRender extends React.Component<pdfPageProps, pdfPageState> {
     this.itemsPerRow = props.itemsPerRow
     this.id = props.id
     this.pdfDimensionIndexed = []
+    this.margin = props.margin
     this.state = {
       pdfDimension: { width: [], height: [] },
       numPages: 1,
@@ -33,8 +36,9 @@ class PdfRender extends React.Component<pdfPageProps, pdfPageState> {
 
   shouldComponentUpdate(nextProps: pdfPageProps, nextState: pdfPageState) {
     this.itemsPerRow = nextProps.itemsPerRow
+    this.margin = nextProps.margin
     return (
-      this.props.itemsPerRow !== nextProps.itemsPerRow || this.state !== nextState
+      this.props.itemsPerRow !== nextProps.itemsPerRow || this.props.margin !== nextProps.margin || this.state !== nextState
     )
   }
 
@@ -90,7 +94,7 @@ class PdfRender extends React.Component<pdfPageProps, pdfPageState> {
                     sx={{
                       width: `calc(100% / ${this.itemsPerRow + (this.HeightL ? 1 : 0)})`,
                       paddingTop: `calc(100% * ${(this.state.pdfDimension.width.length == 0 || this.state.pdfDimension.height.length == 0) ? 1
-                        : (this.state.pdfDimension.height.reduce((v, c) => v + c) / this.state.pdfDimension.height.length) / (this.state.pdfDimension.width.reduce((v, c) => v + c) / this.state.pdfDimension.width.length)} / ${this.itemsPerRow + (this.HeightL ? 1 : 0)})`,
+                        : ((this.state.pdfDimension.height.reduce((v, c) => v + c) / this.state.pdfDimension.height.length) + ((this.margin.top + this.margin.bottom) * 30)) / ((this.state.pdfDimension.width.reduce((v, c) => v + c) / this.state.pdfDimension.width.length) + ((this.margin.left + this.margin.right) * 30))} / ${this.itemsPerRow + (this.HeightL ? 1 : 0)})`,
                       transition: 'padding-top .3s linear',
                       position: 'relative',
                       height: 0,
@@ -132,12 +136,12 @@ class PdfRender extends React.Component<pdfPageProps, pdfPageState> {
                             transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
                             backgroundColor: 'white',
                             color: 'white',
-                            padding: `${(e => {
+                            padding: ((e, g) => {
                               if(e)
-                                return (this.props.margin.left * 100 / e.width) * (e.height > e.width ?  : )
+                                return `${(g < e.height / e.width) ? (this.margin.top * g * 6700 / e.height) : (this.margin.top * 6700 / e.width)}% ${this.margin.right * g * 6700 / e.height}% ${(g < e.height / e.width) ? (this.margin.bottom * g * 6700 / e.height) : (this.margin.bottom * 6700 / e.width)}% ${this.margin.left * g * 6700 / e.height}%`
                               else
-                                return 0
-                            })(this.pdfDimensionIndexed.find(e => e.index == pageindex))}px 10 10 10`, //this.props.margin.top * 37.795
+                                return '0px'
+                            })(this.pdfDimensionIndexed.find(e => e.index == pageindex), (this.state.pdfDimension.width.length == 0 || this.state.pdfDimension.height.length == 0) ? 1 : (((this.state.pdfDimension.height.reduce((v, c) => v + c) / this.state.pdfDimension.height.length) / (this.state.pdfDimension.width.reduce((v, c) => v + c) / this.state.pdfDimension.width.length)) / (this.itemsPerRow + (this.HeightL ? 1 : 0)))), 
                           },
                         }}>
                         <Page pageNumber={pageindex} height={0} onLoadSuccess={(e) => {
@@ -159,7 +163,7 @@ class PdfRender extends React.Component<pdfPageProps, pdfPageState> {
                     sx={{
                       width: `calc(100% / ${this.itemsPerRow + (this.HeightL ? 1 : 0)})`,
                       paddingTop: `calc(100% * ${(this.state.pdfDimension.width.length == 0 || this.state.pdfDimension.height.length == 0) ? 1
-                        : (this.state.pdfDimension.height.reduce((v, c) => v + c) / this.state.pdfDimension.height.length) / (this.state.pdfDimension.width.reduce((v, c) => v + c) / this.state.pdfDimension.width.length)} / ${this.itemsPerRow + (this.HeightL ? 1 : 0)})`,
+                        : ((this.state.pdfDimension.height.reduce((v, c) => v + c) / this.state.pdfDimension.height.length) + ((this.margin.top + this.margin.bottom) * 30)) / ((this.state.pdfDimension.width.reduce((v, c) => v + c) / this.state.pdfDimension.width.length) + ((this.margin.left + this.margin.right) * 30))} / ${this.itemsPerRow + (this.HeightL ? 1 : 0)})`,
                       transition: 'padding-top .3s linear',
                       position: 'absolute',
                       bottom: 0,
@@ -205,6 +209,12 @@ class PdfRender extends React.Component<pdfPageProps, pdfPageState> {
                             transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
                             backgroundColor: 'white',
                             color: 'white',
+                            padding: ((e, g) => {
+                              if (e)
+                                return `${(g < e.height / e.width) ? (this.margin.top * g * 6700 / e.height) : (this.margin.top * 6700 / e.width)}% ${this.margin.right * g * 6700 / e.height}% ${(g < e.height / e.width) ? (this.margin.bottom * g * 6700 / e.height) : (this.margin.bottom * 6700 / e.width)}% ${this.margin.left * g * 6700 / e.height}%`
+                              else
+                                return '0px'
+                            })(this.pdfDimensionIndexed.find(e => e.index == pageindex), (this.state.pdfDimension.width.length == 0 || this.state.pdfDimension.height.length == 0) ? 1 : (((this.state.pdfDimension.height.reduce((v, c) => v + c) / this.state.pdfDimension.height.length) / (this.state.pdfDimension.width.reduce((v, c) => v + c) / this.state.pdfDimension.width.length)) / (this.itemsPerRow + (this.HeightL ? 1 : 0)))),
                           },
                         }}>
                         <Page pageNumber={this.overflowBound(this.state.numPages)[0]} height={0} onLoadSuccess={(e) => {
