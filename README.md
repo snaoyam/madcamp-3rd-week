@@ -11,17 +11,11 @@ KAIST 전산학부 문동우
 
 ## Environment
 OS : Window
-
 Frontend : Java Script
-
 Backend : Python, HTML, css
-
 IDE : Visual studio Code
-
 Framework : Flask
-
 Backend: flask + json
-
 Database: SQLite
 
 ## Description
