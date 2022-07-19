@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Button, CircularProgress } from '@mui/material'
-import { Document, Page, /*pdfjs*/ } from 'react-pdf'
+import Router from 'next/router'
 import MarginInput from './margin_input'
 import UploadIcon from '@mui/icons-material/Upload'
 import SendIcon from '@mui/icons-material/Send'
@@ -104,23 +104,37 @@ class SideBar extends React.PureComponent<sideBarProps, sideBarState> {
               disabled={this.state.loading}
               endIcon={this.state.loading ? <CircularProgress size={20} sx={{color: 'white'}}/> : <SendIcon />}
               onClick={() => {
-                const dataTransfer = new DataTransfer()
-                this.props.dataTransferList.forEach(file => {
-                  dataTransfer.items.add((file.file ?? { name: null }))
-                })
-                Axios.postForm('/merge', {
-                  'filecount': dataTransfer.files.length,
-                  'files[]': dataTransfer.files,
-                  'id': this.props.serialNumber.current,
-                  'left': this.props.margin.left,
-                  'top': this.props.margin.top,
-                  'right': this.props.margin.right,
-                  'bottom': this.props.margin.bottom,
-                }).then(
-                  () => {
-                    console.log("asd!")
-                  }
-                )
+                if(this.props.dataTransferList.length > 0) {
+                  this.setState(state => {
+                    return { ...state, loading: true }
+                  })
+                  const dataTransfer = new DataTransfer()
+                  this.props.dataTransferList.forEach(file => {
+                    dataTransfer.items.add((file.file ?? { name: null }))
+                  })
+                  Axios.postForm('/merge', {
+                    'filecount': dataTransfer.files.length,
+                    'files[]': dataTransfer.files,
+                    'id': this.props.serialNumber.current,
+                    'left': this.props.margin.left,
+                    'top': this.props.margin.top,
+                    'right': this.props.margin.right,
+                    'bottom': this.props.margin.bottom,
+                  }).then(
+                    (response) => {
+                      this.setState(state => {
+                        return { ...state, loading: false }
+                      })
+                      Router.push(`/result/${this.props.serialNumber.current}`)
+                    }
+                  ).catch(
+                    () => {
+                      this.setState(state => {
+                        return { ...state, loading: false }
+                      })
+                    }
+                  )
+                }
               }}
               sx={{
                 borderRadius: '8px',

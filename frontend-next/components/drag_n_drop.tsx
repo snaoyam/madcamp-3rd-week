@@ -129,7 +129,7 @@ const DragNDrop = ({ dataTransferList, setDataTransferList, sx, itemsPerRow, fil
           width: '100%',
           position: 'absolute',
         }}>
-          Drop your PDF files Here to add Margin
+          Drop PDF files Here
         </Box>
         <Box sx={{
           width: '100%',
