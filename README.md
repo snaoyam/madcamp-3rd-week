@@ -10,13 +10,13 @@ POSTECH 컴퓨터공학과 박정은
 KAIST 전산학부 문동우
 
 ## Environment
-OS : Window
-Frontend : Java Script
-Backend : Python, HTML, css
-IDE : Visual studio Code
-Framework : Flask
-Backend: flask + json
-Database: SQLite
+OS : Window               
+Frontend : Java Script               
+Backend : Python, HTML, css               
+IDE : Visual studio Code               
+Framework : Flask               
+Backend: flask + json               
+Database: SQLite               
 
 ## Description
 이 웹은 PDF에 padding을 추가할 수 있고, 여러 PDF를 upload시 병합할 수 있고, ,JPG, PNG 등과같이 PDF가 아닌 파일을 PDF로 전환해준다.
