@@ -39,6 +39,7 @@ Database: SQLite
 | | |                                    
 |---|---|                   
 | | |                   
+
 첫 화면에선 file을 upload한다. 한번에 여러 파일을 Multi upload 할 수도 있다. 
 Left, top, right, bottom 측에 얼마나 padding을 둘지에 대한 option또한 입력받는다.
 
@@ -47,5 +48,6 @@ Left, top, right, bottom 측에 얼마나 padding을 둘지에 대한 option또�
 | | |                   
 |---|---|                   
 | | |                   
+
 upload된 file들중, 해당 user id가 upload한 file들을 모두 merge하여 반환해준다.
 만약 입력받은 file이 PDF형식이 아닌 경우, 이는 PDF로 전환되어 merge작업이 이루어 진다.
