@@ -6,9 +6,16 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 //pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 import ClearIcon from '@mui/icons-material/Clear'
 
-const DragNDrop = ({ sx, itemsPerRow, fileInputRef, margin }: { sx: { width: number | string, height: number | string }, itemsPerRow: number, fileInputRef: React.MutableRefObject<HTMLInputElement | null>, margin: { left: number, top: number, right: number, bottom: number } }) => {
+const DragNDrop = ({ dataTransferList, setDataTransferList, sx, itemsPerRow, fileInputRef, margin } 
+  : { 
+    dataTransferList: { file: File, index: number }[], 
+    setDataTransferList: React.Dispatch<React.SetStateAction<{ file: File, index: number }[]>>, 
+    sx: { width: number | string, height: number | string }, 
+    itemsPerRow: number, 
+    fileInputRef: React.MutableRefObject<HTMLInputElement | null>, 
+    margin: { left: number, top: number, right: number, bottom: number } 
+  }) => {
   const [dragActive, setDragActive] = useState<boolean>(false)
-  const [dataTransferList, setDataTransferList] = useState<{ file: File, index: number }[]>([])
   const dataFileCounter = useRef<number>(0)
   //const [pdfHeight, setPdfHeight] = useState<number[]>([1])
   //const [pdfWidth, setPdfWidth] = useState<number[]>([1])
@@ -18,16 +25,6 @@ const DragNDrop = ({ sx, itemsPerRow, fileInputRef, margin }: { sx: { width: num
   useEffect(() => {
     setIsBrowser(typeof window == "object")
   }, [])
-
-  useEffect(() => {
-    const dataTransfer = new DataTransfer()
-    dataTransferList.forEach(file => {
-      dataTransfer.items.add((file.file ?? { name: null }))
-    })
-    if (fileInputRef.current) {
-      fileInputRef.current.files = dataTransfer.files
-    }
-  }, [dataTransferList])
 
   const handleDragEnter = function (e: DragEvent<HTMLInputElement>) {
     e.preventDefault()

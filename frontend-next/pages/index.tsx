@@ -12,7 +12,9 @@ const Home: NextPage = () => {
   const [itemsPerRow, setItemsPerRow] = useState<number>(3)
   const { width, height } = useWindowDimensions()
   const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const [dataTransferList, setDataTransferList] = useState<{ file: File, index: number }[]>([])
   const [margin, setMargin] = useState<{ left: number, top: number, right: number, bottom: number }>({left: 0, top: 0, right: 0, bottom: 0})
+  const serialNumber = useRef<number>(Math.floor(100000000 + Math.random() * 900000000))
 
   useEffect(() => {
     console.log(itemsPerRow)
@@ -21,38 +23,47 @@ const Home: NextPage = () => {
     if(itemsPerRow !== 4 && width > 1000) setItemsPerRow(4)
   }, [width])
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        padding: '8px',
-        paddingBottom: '100px',
-      }}>
-      <Box sx={{
-        width: '70%',
-        height: '100%',
-      }}>
-        <DragNDrop
-          fileInputRef={fileInputRef}
-          itemsPerRow={itemsPerRow}
-          margin={margin}
-          sx={{
-            width: '100%',
-            height: '70vh',
-          }} />
-      </Box>
-      <Box sx={{
-        width: '30%',
-        position: 'relative',
-        verticalAlign: 'baseline',
-        boxSizing: 'border-box',
-        display: 'block',
-      }}>
-        <Box sx={{
-          position: 'sticky',
-          top: '0',
-          padding: '50px 5px'
+    <Box sx={{
+      display: 'flex',
+      justifyContent: 'center',
+    }}>
+      <Box
+        sx={{
+          display: 'flex',
+          //flexDirection: 'column-reverse',
+          padding: '8px',
+          width: '100%',
+          maxWidth: '1200px',
+          paddingBottom: '100px',
         }}>
-          <SideBar fileInputRef={fileInputRef} margin={margin} setMargin={setMargin}/>
+        <Box sx={{
+          flex: '7',
+        }}>
+          <DragNDrop
+            dataTransferList={dataTransferList}
+            setDataTransferList={setDataTransferList}
+            fileInputRef={fileInputRef}
+            itemsPerRow={itemsPerRow}
+            margin={margin}
+            sx={{
+              width: '100%',
+              height: 'min(70vh, 70vw)',
+            }} />
+        </Box>
+        <Box sx={{
+          flex: '3',
+          position: 'relative',
+          verticalAlign: 'baseline',
+          boxSizing: 'border-box',
+          display: 'block',
+        }}>
+          <Box sx={{
+            position: 'sticky',
+            top: '0',
+            padding: '10px 5px 10px 20px',
+          }}>
+            <SideBar serialNumber={serialNumber} fileInputRef={fileInputRef} margin={margin} setMargin={setMargin} dataTransferList={dataTransferList}/>
+          </Box>
         </Box>
       </Box>
     </Box>

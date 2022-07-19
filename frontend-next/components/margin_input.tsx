@@ -11,7 +11,7 @@ const MarginInput = ({margin, setMargin} : {
   return (
     <Box sx={{
       display: 'grid',
-      gridTemplateRows: '1fr 1fr 1fr',
+      gridTemplateRows: '1fr 2fr 1fr',
       gridTemplateColumns: '1fr 1fr 1fr',
       width: '100%',
       height: '100%',
