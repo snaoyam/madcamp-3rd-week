@@ -30,10 +30,10 @@ def create_app(config=None):
             top = request.values.to_dict()['top']
             right = request.values.to_dict()['right']
             bottom = request.values.to_dict()['bottom']
-            left = str(round(int(left) * 28.3465))
-            top = str(round(int(top) * 28.3465))
-            right = str(round(int(right) * 28.3465))
-            bottom = str(round(int(bottom) * 28.3465))
+           # left = str(round(int(left) * 28.3465))
+            #top = str(round(int(top) * 28.3465))
+            #right = str(round(int(right) * 28.3465))
+            #bottom = str(round(int(bottom) * 28.3465))
             for file in files:
                 filename = file.filename
                 filename.replace(' ', '\ ')
@@ -42,7 +42,6 @@ def create_app(config=None):
                 database_forPadding.save(filename,user_id,left,top,right,bottom)
                 download_padding_pdf(user_id=user_id, filename=filename, left=left, top=top, right=right, bottom=bottom)
             result = merge(user_id=user_id)
-            print(json.dumps({'msg': 'success'}))
             return Response(json.dumps({'msg': 'success'}), status=200)
         except Exception as e:
             print(e)
@@ -79,8 +78,9 @@ def create_app(config=None):
             imageAfter = imageBefore.convert('RGB')
             imageAfter.save("static/before_add_padding/{}".format(new_filename))
             filename=new_filename
-
-        os.system('pdfcrop --margins \'{} {} {} {}\' "static/before_add_padding/{}" "static/after_add_padding/{}"'.format(left, top, right, bottom, filename, filename))
+        print('pdfjam --fitpaper true --trim "-{}cm -{}cm -{}cm -{}cm" "static/before_add_padding/{}" -o "static/after_add_padding/{}"'.format(left, bottom, right, top, filename, filename))
+        os.system('pdfjam --fitpaper true --trim "-{}cm -{}cm -{}cm -{}cm" "static/before_add_padding/{}" -o "static/after_add_padding/{}"'.format(left, bottom, right, top, filename, filename))
+        #os.system('pdfcrop --margins \'{} {} {} {}\' "static/before_add_padding/{}" "static/after_add_padding/{}"'.format(left, top, right, bottom, filename, filename))
         return #send_file("static/after_add_padding/{}".format(filename),as_attachment=True)
 
 
@@ -107,8 +107,6 @@ def create_app(config=None):
     
     @app.route("/download/<int:user_id>/", methods=['GET'])
     def download_merged_file(user_id):
-        print("~~~~~~~~~~~~~~~~~~~~~~~")
-        print(user_id)
         return send_file('static/merged_file/complete{}.pdf'.format(user_id),as_attachment=True)
 
     return app
