@@ -7,7 +7,7 @@ def save(filename, user_id, left, top, right, bottom):
     df = pd.read_csv("database_forPadding.csv")
     idx = 0
     for i in range(len(df)):
-        if (user_id==df.iloc[i]["user_id"]):
+        if (int(user_id)==int(df.iloc[i]["user_id"])):
             idx+=1
     new_df = pd.DataFrame({"filename": filename,
                             "user_id": user_id,
