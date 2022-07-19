@@ -46,6 +46,9 @@ PDF에 padding을 추가한다면, 문서 텍스트 바로 위에 필기를 할 
 Left, top, right, bottom 측에 얼마나 padding을 둘지에 대한 option또한 입력받는다.
 
 ### tab2 – file merge
+|merged file download 화면|                                  
+|---|  
+|![image](https://user-images.githubusercontent.com/91946706/179752389-ea4d1da6-8969-475d-b447-779fd89db43d.png)|               
 
 upload된 file들중, 해당 user id가 upload한 file들을 모두 merge하여 반환해준다.                   
 만약 입력받은 file이 PDF형식이 아닌 경우, 이는 PDF로 전환되어 merge작업이 이루어 진다.
