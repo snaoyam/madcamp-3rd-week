@@ -60,7 +60,7 @@ const Home: NextPage = () => {
           <Box sx={{
             position: 'sticky',
             top: '0',
-            padding: '10px 5px 10px 20px',
+            padding: '10px 5px',
           }}>
             <SideBar serialNumber={serialNumber} fileInputRef={fileInputRef} margin={margin} setMargin={setMargin} dataTransferList={dataTransferList}/>
           </Box>

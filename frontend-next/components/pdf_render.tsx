@@ -2,6 +2,7 @@ import React, { useEffect, useState, DragEvent, ChangeEvent, useRef, ReactElemen
 import { Box, ButtonBase } from '@mui/material' //!Grow
 import { Document, Page, /*pdfjs*/ } from 'react-pdf'
 import { ThirtyFpsSharp, ThreeSixty } from '@mui/icons-material'
+import { fontSize } from '@mui/system'
 
 type pdfPageProps = { 
   file: { file: File, index: number }, 
@@ -51,20 +52,39 @@ class PdfRender extends React.Component<pdfPageProps, pdfPageState> {
     return (
       <React.Fragment>
         <Box sx={{
-          display: 'flex',
-          justifyContent: 'end',
           padding: '4px 8px 0 8px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'end',
         }}>
-          {this.overflowBound(this.state.numPages)[1] !== 0 ? <ButtonBase onClick={() => {
-            this.setState((state) => {
-              return { ...state, expanded: !this.state.expanded }
-            })
-          }} sx={{ textTransform: 'unset', color: '#adadad', borderRadius: '4px', padding: '3px 4px' }}>{this.state.expanded ? 'Collapse Pages' : 'Expand Pages'}</ButtonBase> : null}
-          <ButtonBase onClick={() => {
-            this.props.setDataTransferList(v => {
-              return v.filter(v => v != this.file)
-            })
-          }} sx={{ textTransform: 'unset', color: '#e76464', borderRadius: '4px 8px 4px 4px', padding: '3px 4px' }}>Delete File</ButtonBase>
+          <Box sx={{
+            padding: '3px 4px',
+            color: 'rgb(100, 100, 100)',
+            fontSize: 'calc(0.5vw + 8px)',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+          }}>
+            {this.file.file.name}
+          </Box>
+          <Box sx={{
+            display: 'flex',
+            flexShrink: '0',
+            '& button': {
+              fontSize: 'calc(0.5vw + 8px)',
+            }
+          }}>
+            {this.overflowBound(this.state.numPages)[1] !== 0 ? <ButtonBase onClick={() => {
+              this.setState((state) => {
+                return { ...state, expanded: !this.state.expanded }
+              })
+            }} sx={{ textTransform: 'unset', color: '#adadad', borderRadius: '4px', padding: '3px 4px' }}>{this.state.expanded ? 'Collapse Pages' : 'Expand Pages'}</ButtonBase> : null}
+            <ButtonBase onClick={() => {
+              this.props.setDataTransferList(v => {
+                return v.filter(v => v != this.file)
+              })
+            }} sx={{ textTransform: 'unset', color: '#e76464', borderRadius: '4px 8px 4px 4px', padding: '3px 4px' }}>Delete File</ButtonBase>
+          </Box>
         </Box>
         <Box id={this.id}
           sx={{
