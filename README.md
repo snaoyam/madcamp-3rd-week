@@ -25,7 +25,7 @@ Backend: flask + json
 Database: SQLite
 
 ## Description
-이 웹은 PDF에 padding을 추가할 수 있고, JPG, PNG 등과같이 PDF가 아닌 파일을 PDF로 전환할 수 있으며, 여러 PDF를 하나의 PDF로 병합할 수 있다.            
+이 웹은 PDF에 padding을 추가할 수 있고, JPG, PNG 등과같이 PDF가 아닌 파일을 PDF로 전환할 수 있으며, 여러 PDF를 하나의 PDF로 병합할 수 있다.
 PDF에 padding을 추가한다면, 문서 텍스트 바로 위에 필기를 할 수 있는 공간을 확보할 수 있다는 이점이 있다.
 
 ## Implementation Method
