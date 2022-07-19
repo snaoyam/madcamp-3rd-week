@@ -29,9 +29,9 @@ Database: SQLite
 
 ## Implementation Method
 1. data 저장 : database_forPadding.csv
-* 사용자의 id와, 사용자가 입력한 option들은 csv 파일에 [ index,filename,user_id,left,top,right,bottom ] data로 저장해준다.
+  사용자의 id와 사용자가 입력한 option들은 csv 파일에 [ index,filename,user_id,left,top,right,bottom ]형식의 data를 가진 list로 저장된다.
 2. data 전달 : database_forPadding.py
-* csv에 저장된 정보들은, database_forPadding.py를 통해 각 함수가 필요로 하는 특정 data들로 parsing되어 app.py로 전달된다.
+  csv에 저장된 정보들은, database_forPadding.py를 통해 각 함수가 필요로 하는 특정 data들로 parsing되어 app.py로 전달된다.
 
 ## Usage
 ### tab1 – file upload
