@@ -1,8 +1,8 @@
-# PDF_editor
+# PDF_padder
 2022 Summer MadCamp Week3 
 
 ## Project name
-PDF editor
+PDF padder
 
 ## Teammates
 POSTECH 컴퓨터공학과 박정은
