@@ -1,5 +1,4 @@
-# PDF_padder
-2022 Summer MadCamp Week3 
+# PDF Padder
 > 2022 여름 MadCamp 2분반 박정은, 문동우 팀
 
 ## Project Name
