@@ -50,19 +50,46 @@ const appbar = () => {
         }}>
           Type ID to Download: 
         </Box>
-        <InputBase 
-          value={idInput == 0 ? '' : idInput}
-          onChange={v => {
-            if (v.target.value.length < 10) {
-              setIdInput(parseInt(v.target.value == '' ? '0' : v.target.value))
-            }
-          }}
-        sx={{
-          backgroundColor: 'white',
-          borderRadius: '4px',
-          color: 'black',
+        <Box sx={{
           padding: '0 5px',
-        }} />
+          position: 'relative',
+        }}>
+          <Box sx={{
+            position: 'absolute',
+            top: 0,
+            width: 'calc(100% - 10px)',
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'space-evenly',
+            alignItems: 'center',
+            backgroundColor: 'white',
+            borderRadius: '4px',
+            '& > div': {
+              height: '1.3375em',
+            }
+          }}>
+            <Box sx={{ flex: 1, color: 'black', textAlign: 'center' }}>{String(idInput).slice(0, 3) == '0' ? '' : String(idInput).slice(0, 3)}</Box>
+            <Box sx={{padding: '0 4px', color: 'rgb(100, 100, 100)'}}>-</Box>
+            <Box sx={{ flex: 1, color: 'black', textAlign: 'center' }}>{String(idInput).slice(3, 6)}</Box>
+            <Box sx={{padding: '0 4px', color: 'rgb(100, 100, 100)'}}>-</Box>
+            <Box sx={{ flex: 1, color: 'black', textAlign: 'center' }}>{String(idInput).slice(6, 9)}</Box>
+          </Box>
+          <InputBase
+            value={idInput == 0 ? '' : String(idInput)}
+            onChange={v => {
+              if (v.target.value.length < 10) {
+                setIdInput(parseInt(v.target.value == '' ? '0' : v.target.value))
+              }
+            }}
+            sx={{
+              backgroundColor: 'white',
+              //borderRadius: '4px',
+              //color: 'black',
+              opacity: '0',
+              textAlign: 'center',
+            }}
+          />
+        </Box>
         <IconButton sx={{color: 'white'}} aria-label="upload picture" component="label" onClick={
           () => {
             if (idInput >= 100000000 && idInput < 1000000000) {
