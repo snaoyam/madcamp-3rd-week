@@ -81,7 +81,7 @@ const Result = () => {
             padding: '10px 0 0 0',
             fontWeight: 'bold',
           }}>
-            {` ID: ${router.query.id} `}
+            {` ID: ${String(router.query.id).slice(0, 3)}-${String(router.query.id).slice(3, 6)}-${String(router.query.id).slice(6, 9)}`}
           </Box>
         </Box>
       </Box>
