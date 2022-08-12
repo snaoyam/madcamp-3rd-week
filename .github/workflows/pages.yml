@@ -7,6 +7,11 @@ on:
     paths:
       - frontend-next/**
       - .github/**
+  pull_request:
+    branches: ["main"]
+    paths:
+      - frontend-next/**
+      - .github/**
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
