@@ -5,7 +5,7 @@ import DownloadingIcon from '@mui/icons-material/Downloading'
 import { textAlign } from '@mui/system'
 
 
-const appbar = () => {
+const Topbar = () => {
 
   const [idInput, setIdInput] = React.useState<number>(0)
 
@@ -104,4 +104,4 @@ const appbar = () => {
   )
 }
 
-export default appbar
+export default Topbar
