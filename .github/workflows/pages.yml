@@ -22,13 +22,14 @@ concurrency:
   group: "pages"
   cancel-in-progress: true
 
+defaults:
+  run:
+    working-directory: frontend-next
+
 jobs:
   # Build job
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./frontend-next
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -91,9 +92,6 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./frontend-next
     needs: build
     steps:
       - name: Deploy to GitHub Pages
