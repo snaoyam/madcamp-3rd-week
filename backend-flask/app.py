@@ -1,12 +1,7 @@
 import os
 from flask_cors import CORS
 import database_forPadding
-from io import BytesIO
-import sqlite3  # SQLite database
-import copy
-from flask import Flask, render_template, request, send_file, redirect, url_for, jsonify, Response
-from flask_sqlalchemy import SQLAlchemy # SQLite database
-from PyPDF2 import PdfFileMerger    # pdf merge
+from flask import Flask, request, send_file, Response
 from pathlib import Path    # 파일 확장자 없이 파일이름 가져오기
 import json # json
 from PIL import Image
