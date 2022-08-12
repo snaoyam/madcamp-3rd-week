@@ -21,7 +21,7 @@ const Home: NextPage = () => {
     //if(itemsPerRow !== 2 && width < 600) setItemsPerRow(2)
     if(itemsPerRow !== 3 && width < 1000) setItemsPerRow(3)
     if(itemsPerRow !== 4 && width > 1000) setItemsPerRow(4)
-  }, [width])
+  }, [])
   return (
     <Box sx={{
       display: 'flex',
