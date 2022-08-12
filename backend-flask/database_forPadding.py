@@ -1,7 +1,6 @@
 import pandas as pd
 import app
 import os
-from sklearn.datasets import load_iris
 
 def save(filename, user_id, left, top, right, bottom):
     df = pd.read_csv("database_forPadding.csv")
