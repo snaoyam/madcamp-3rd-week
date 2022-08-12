@@ -10,8 +10,8 @@ type sideBarProps = {
   serialNumber: React.MutableRefObject<number>,
   dataTransferList: { file: File, index: number }[], 
   fileInputRef: React.MutableRefObject<HTMLInputElement | null>,
-  margin: { left: number, top: number, right: number, bottom: number },
-  setMargin: React.Dispatch<React.SetStateAction<{ left: number, top: number, right: number, bottom: number }>>,
+  margin: { left: string, top: string, right: string, bottom: string },
+  setMargin: React.Dispatch<React.SetStateAction<{ left: string, top: string, right: string, bottom: string }>>,
 }
 type sideBarState = { loading: boolean}
 
@@ -113,7 +113,7 @@ class SideBar extends React.PureComponent<sideBarProps, sideBarState> {
                   this.props.dataTransferList.forEach(file => {
                     dataTransfer.items.add((file.file ?? { name: null }))
                   })
-                  Axios.postForm('http://192.249.18.169/merge', {
+                  Axios.postForm('http://ssal.sparcs.org:30180/merge', {
                     'filecount': dataTransfer.files.length,
                     'files[]': dataTransfer.files,
                     'id': this.props.serialNumber.current,

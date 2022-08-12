@@ -13,7 +13,7 @@ const DragNDrop = ({ dataTransferList, setDataTransferList, sx, itemsPerRow, fil
     sx: { width: number | string, height: number | string }, 
     itemsPerRow: number, 
     fileInputRef: React.MutableRefObject<HTMLInputElement | null>, 
-    margin: { left: number, top: number, right: number, bottom: number } 
+    margin: { left: string, top: string, right: string, bottom: string } 
   }) => {
   const [dragActive, setDragActive] = useState<boolean>(false)
   const dataFileCounter = useRef<number>(0)

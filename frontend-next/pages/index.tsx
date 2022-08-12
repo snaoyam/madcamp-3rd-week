@@ -13,7 +13,7 @@ const Home: NextPage = () => {
   const { width, height } = useWindowDimensions()
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [dataTransferList, setDataTransferList] = useState<{ file: File, index: number }[]>([])
-  const [margin, setMargin] = useState<{ left: number, top: number, right: number, bottom: number }>({left: 0, top: 0, right: 0, bottom: 0})
+  const [margin, setMargin] = useState<{ left: string, top: string, right: string, bottom: string }>({left: '0', top: '0', right: '0', bottom: '0'})
   const serialNumber = useRef<number>(0)
 
   useEffect(() => {

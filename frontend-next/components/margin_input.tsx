@@ -4,8 +4,8 @@ import { Box, OutlinedInput } from '@mui/material'
 
 
 const MarginInput = ({margin, setMargin} : {
-  margin: { left: number, top: number, right: number, bottom: number },
-  setMargin: React.Dispatch<React.SetStateAction<{ left: number, top: number, right: number, bottom: number }>>
+  margin: { left: string, top: string, right: string, bottom: string },
+  setMargin: React.Dispatch<React.SetStateAction<{ left: string, top: string, right: string, bottom: string }>>
 }): React.ReactElement => {
 
   return (
@@ -25,7 +25,7 @@ const MarginInput = ({margin, setMargin} : {
           value={margin.top}
           onChange={(v) => {
             setMargin(vi => {
-              return { ...vi, top: parseInt(v.target.value === '' ? '0' : v.target.value) }
+              return { ...vi, top: ((v.target.value === '-' || v.target.value === '--' || v.target.value === '0-' || v.target.value === '-0') ? '-' : String(parseInt(v.target.value === '' ? '0' : v.target.value))) }
             })
           }} />
       </Box>
@@ -37,7 +37,7 @@ const MarginInput = ({margin, setMargin} : {
           value={margin.left}
           onChange={(v) => {
             setMargin(vi => {
-              return { ...vi, left: parseInt(v.target.value === '' ? '0' : v.target.value) }
+              return { ...vi, left: ((v.target.value === '-' || v.target.value === '--' || v.target.value === '0-' || v.target.value === '-0') ? '-' : String(parseInt(v.target.value === '' ? '0' : v.target.value))) }
             })
           }} />
       </Box>
@@ -64,7 +64,7 @@ const MarginInput = ({margin, setMargin} : {
           value={margin.right}
           onChange={(v) => {
             setMargin(vi => {
-              return { ...vi, right: parseInt(v.target.value === '' ? '0' : v.target.value) }
+              return { ...vi, right: ((v.target.value === '-' || v.target.value === '--' || v.target.value === '0-' || v.target.value === '-0') ? '-' : String(parseInt(v.target.value === '' ? '0' : v.target.value))) }
             })
           }} />
       </Box>
@@ -76,7 +76,7 @@ const MarginInput = ({margin, setMargin} : {
           value={margin.bottom}
           onChange={(v) => {
             setMargin(vi => {
-              return { ...vi, bottom: parseInt(v.target.value === '' ? '0' : v.target.value) }
+              return { ...vi, bottom: ((v.target.value === '-' || v.target.value === '--' || v.target.value === '0-' || v.target.value === '-0') ? '-' : String(parseInt(v.target.value === '' ? '0' : v.target.value))) }
             })
           }} />
       </Box>
