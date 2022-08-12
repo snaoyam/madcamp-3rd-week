@@ -1,13 +1,11 @@
-# Sample workflow for building and deploying a Next.js site to GitHub Pages
-#
-# To get started with Next.js see: https://nextjs.org/docs/getting-started
-#
-name: Deploy Next.js site to Pages
+name: PdfPad
 
 on:
   # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
+    paths:
+      - frontend-next/**
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -27,26 +25,16 @@ jobs:
   # Build job
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend-next
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Detect package manager
-        id: detect-package-manager
-        run: |
-          if [ -f "${{ github.workspace }}/yarn.lock" ]; then
-            echo "::set-output name=manager::yarn"
-            echo "::set-output name=command::install"
-            echo "::set-output name=runner::yarn"
-            exit 0
-          elif [ -f "${{ github.workspace }}/package.json" ]; then
-            echo "::set-output name=manager::npm"
-            echo "::set-output name=command::ci"
-            echo "::set-output name=runner::npx --no-install"
-            exit 0
-          else
-            echo "Unable to determine packager manager"
-            exit 1
-          fi
+      - run: echo "::set-output name=manager::npm"
+      - run: echo "::set-output name=command::ci"
+      - run: echo "::set-output name=runner::npx --no-install"
+      - run: exit 0
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
@@ -88,6 +76,9 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend-next
     needs: build
     steps:
       - name: Deploy to GitHub Pages
