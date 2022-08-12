@@ -9,10 +9,6 @@ import lottie from 'react-lottie'
 
 const Result = () => {
   const router = useRouter()
-  /*useEffect(() => {
-    window.location.href = `http://ssal.sparcs.org:30180/download/${router.query.id}`
-    Router.replace('/')
-  })*/
   const likecontainer = React.useRef<any>()
 
   const Animation = () => {

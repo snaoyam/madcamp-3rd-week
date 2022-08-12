@@ -23,50 +23,55 @@ const Home: NextPage = () => {
     if(itemsPerRow !== 4 && width > 1000) setItemsPerRow(4)
   }, [itemsPerRow, width])
   return (
-    <Box sx={{
-      display: 'flex',
-      justifyContent: 'center',
-    }}>
-      <Box
-        sx={{
-          display: 'flex',
-          //flexDirection: 'column-reverse',
-          padding: '8px',
-          width: '100%',
-          maxWidth: '1200px',
-          paddingBottom: '100px',
-        }}>
-        <Box sx={{
-          flex: '7',
-        }}>
-          <DragNDrop
-            dataTransferList={dataTransferList}
-            setDataTransferList={setDataTransferList}
-            fileInputRef={fileInputRef}
-            itemsPerRow={itemsPerRow}
-            margin={margin}
-            sx={{
-              width: '100%',
-              height: 'min(70vh, 70vw)',
-            }} />
-        </Box>
-        <Box sx={{
-          flex: '3',
-          position: 'relative',
-          verticalAlign: 'baseline',
-          boxSizing: 'border-box',
-          display: 'block',
-        }}>
-          <Box sx={{
-            position: 'sticky',
-            top: '0',
-            padding: '10px 5px',
+    <React.Fragment>
+      <Head>
+        <title>PadPdf</title>
+      </Head>
+      <Box sx={{
+        display: 'flex',
+        justifyContent: 'center',
+      }}>
+        <Box
+          sx={{
+            display: 'flex',
+            //flexDirection: 'column-reverse',
+            padding: '8px',
+            width: '100%',
+            maxWidth: '1200px',
+            paddingBottom: '100px',
           }}>
-            <SideBar serialNumber={serialNumber} fileInputRef={fileInputRef} margin={margin} setMargin={setMargin} dataTransferList={dataTransferList}/>
+          <Box sx={{
+            flex: '7',
+          }}>
+            <DragNDrop
+              dataTransferList={dataTransferList}
+              setDataTransferList={setDataTransferList}
+              fileInputRef={fileInputRef}
+              itemsPerRow={itemsPerRow}
+              margin={margin}
+              sx={{
+                width: '100%',
+                height: 'min(70vh, 70vw)',
+              }} />
+          </Box>
+          <Box sx={{
+            flex: '3',
+            position: 'relative',
+            verticalAlign: 'baseline',
+            boxSizing: 'border-box',
+            display: 'block',
+          }}>
+            <Box sx={{
+              position: 'sticky',
+              top: '0',
+              padding: '10px 5px',
+            }}>
+              <SideBar serialNumber={serialNumber} fileInputRef={fileInputRef} margin={margin} setMargin={setMargin} dataTransferList={dataTransferList}/>
+            </Box>
           </Box>
         </Box>
       </Box>
-    </Box>
+    </React.Fragment>
   )
 }
 
