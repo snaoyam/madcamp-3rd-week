@@ -9,7 +9,7 @@ type pdfPageProps = {
   itemsPerRow: number, 
   id: string, 
   setDataTransferList: React.Dispatch<React.SetStateAction<{ file: File, index: number }[]>>, 
-  margin: { left: number, top: number, right: number, bottom: number },
+  margin: { left: string, top: string, right: string, bottom: string },
 }
 type pdfPageState = { pdfDimension: { width: number[], height: number[] }, numPages: number, expanded: boolean }
 
@@ -18,7 +18,7 @@ class PdfRender extends React.Component<pdfPageProps, pdfPageState> {
   HeightL: boolean
   itemsPerRow: number
   id: string
-  margin: { left: number, top: number, right: number, bottom: number }
+  margin: { left: string, top: string, right: string, bottom: string }
   pdfDimensionIndexed: { index: number, width: number, height: number }[]
   constructor(props: pdfPageProps, state: pdfPageState) {
     super(props)
@@ -114,7 +114,7 @@ class PdfRender extends React.Component<pdfPageProps, pdfPageState> {
                     sx={{
                       width: `calc(100% / ${this.itemsPerRow + (this.HeightL ? 1 : 0)})`,
                       paddingTop: `calc(100% * ${(this.state.pdfDimension.width.length == 0 || this.state.pdfDimension.height.length == 0) ? 1
-                        : ((this.state.pdfDimension.height.reduce((v, c) => v + c) / this.state.pdfDimension.height.length) + ((this.margin.top + this.margin.bottom) * 30)) / ((this.state.pdfDimension.width.reduce((v, c) => v + c) / this.state.pdfDimension.width.length) + ((this.margin.left + this.margin.right) * 30))} / ${this.itemsPerRow + (this.HeightL ? 1 : 0)})`,
+                        : ((this.state.pdfDimension.height.reduce((v, c) => v + c) / this.state.pdfDimension.height.length) + ((parseInt(this.margin.top === '-' ? '0' : this.margin.top) + parseInt(this.margin.bottom === '-' ? '0' : this.margin.bottom)) * 30)) / ((this.state.pdfDimension.width.reduce((v, c) => v + c) / this.state.pdfDimension.width.length) + ((parseInt(this.margin.left === '-' ? '0' : this.margin.left) + parseInt(this.margin.right === '-' ? '0' : this.margin.right)) * 30))} / ${this.itemsPerRow + (this.HeightL ? 1 : 0)})`,
                       transition: 'padding-top .3s linear',
                       position: 'relative',
                       height: 0,
@@ -158,7 +158,7 @@ class PdfRender extends React.Component<pdfPageProps, pdfPageState> {
                             color: 'white',
                             padding: ((e, g) => {
                               if(e)
-                                return `${(g < e.height / e.width) ? (this.margin.top * g * 6700 / e.height) : (this.margin.top * 6700 / e.width)}% ${this.margin.right * g * 6700 / e.height}% ${(g < e.height / e.width) ? (this.margin.bottom * g * 6700 / e.height) : (this.margin.bottom * 6700 / e.width)}% ${this.margin.left * g * 6700 / e.height}%`
+                                return `${(g < e.height / e.width) ? (parseInt(this.margin.top === '-' ? '0' : this.margin.top) * g * 6700 / e.height) : (parseInt(this.margin.top === '-' ? '0' : this.margin.top) * 6700 / e.width)}% ${parseInt(this.margin.right === '-' ? '0' : this.margin.right) * g * 6700 / e.height}% ${(g < e.height / e.width) ? (parseInt(this.margin.bottom === '-' ? '0' : this.margin.bottom) * g * 6700 / e.height) : (parseInt(this.margin.bottom === '-' ? '0' : this.margin.bottom) * 6700 / e.width)}% ${parseInt(this.margin.left === '-' ? '0' : this.margin.left) * g * 6700 / e.height}%`
                               else
                                 return '0px'
                             })(this.pdfDimensionIndexed.find(e => e.index == pageindex), (this.state.pdfDimension.width.length == 0 || this.state.pdfDimension.height.length == 0) ? 1 : (((this.state.pdfDimension.height.reduce((v, c) => v + c) / this.state.pdfDimension.height.length) / (this.state.pdfDimension.width.reduce((v, c) => v + c) / this.state.pdfDimension.width.length)) / (this.itemsPerRow + (this.HeightL ? 1 : 0)))), 
@@ -183,7 +183,7 @@ class PdfRender extends React.Component<pdfPageProps, pdfPageState> {
                     sx={{
                       width: `calc(100% / ${this.itemsPerRow + (this.HeightL ? 1 : 0)})`,
                       paddingTop: `calc(100% * ${(this.state.pdfDimension.width.length == 0 || this.state.pdfDimension.height.length == 0) ? 1
-                        : ((this.state.pdfDimension.height.reduce((v, c) => v + c) / this.state.pdfDimension.height.length) + ((this.margin.top + this.margin.bottom) * 30)) / ((this.state.pdfDimension.width.reduce((v, c) => v + c) / this.state.pdfDimension.width.length) + ((this.margin.left + this.margin.right) * 30))} / ${this.itemsPerRow + (this.HeightL ? 1 : 0)})`,
+                        : ((this.state.pdfDimension.height.reduce((v, c) => v + c) / this.state.pdfDimension.height.length) + ((parseInt(this.margin.top === '-' ? '0' : this.margin.top) + parseInt(this.margin.bottom === '-' ? '0' : this.margin.bottom)) * 30)) / ((this.state.pdfDimension.width.reduce((v, c) => v + c) / this.state.pdfDimension.width.length) + ((parseInt(this.margin.left === '-' ? '0' : this.margin.left) + parseInt(this.margin.right === '-' ? '0' : this.margin.right)) * 30))} / ${this.itemsPerRow + (this.HeightL ? 1 : 0)})`,
                       transition: 'padding-top .3s linear',
                       position: 'absolute',
                       bottom: 0,
@@ -231,7 +231,7 @@ class PdfRender extends React.Component<pdfPageProps, pdfPageState> {
                             color: 'white',
                             padding: ((e, g) => {
                               if (e)
-                                return `${(g < e.height / e.width) ? (this.margin.top * g * 6700 / e.height) : (this.margin.top * 6700 / e.width)}% ${this.margin.right * g * 6700 / e.height}% ${(g < e.height / e.width) ? (this.margin.bottom * g * 6700 / e.height) : (this.margin.bottom * 6700 / e.width)}% ${this.margin.left * g * 6700 / e.height}%`
+                                return `${(g < e.height / e.width) ? (parseInt(this.margin.top === '-' ? '0' : this.margin.top) * g * 6700 / e.height) : (parseInt(this.margin.top === '-' ? '0' : this.margin.top) * 6700 / e.width)}% ${parseInt(this.margin.right === '-' ? '0' : this.margin.right) * g * 6700 / e.height}% ${(g < e.height / e.width) ? (parseInt(this.margin.bottom === '-' ? '0' : this.margin.bottom) * g * 6700 / e.height) : (parseInt(this.margin.bottom === '-' ? '0' : this.margin.bottom) * 6700 / e.width)}% ${parseInt(this.margin.left === '-' ? '0' : this.margin.left) * g * 6700 / e.height}%`
                               else
                                 return '0px'
                             })(this.pdfDimensionIndexed.find(e => e.index == pageindex), (this.state.pdfDimension.width.length == 0 || this.state.pdfDimension.height.length == 0) ? 1 : (((this.state.pdfDimension.height.reduce((v, c) => v + c) / this.state.pdfDimension.height.length) / (this.state.pdfDimension.width.reduce((v, c) => v + c) / this.state.pdfDimension.width.length)) / (this.itemsPerRow + (this.HeightL ? 1 : 0)))),
