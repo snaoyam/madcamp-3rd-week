@@ -74,7 +74,7 @@ def create_app(config=None):
             imageAfter.save("static/before_add_padding/{}".format(new_filename))
             filename=new_filename
         # print('pdfjam --fitpaper true --trim "-{}cm -{}cm -{}cm -{}cm" "static/before_add_padding/{}" -o "static/after_add_padding/{}"'.format(left, bottom, right, top, filename, filename))
-        os.system('pdfjam --fitpaper true --trim "{}cm {}cm {}cm {}cm" "static/before_add_padding/{}" -o "static/after_add_padding/{}"'.format(-left, -bottom, -right, -top, filename, filename))
+        os.system('pdfjam --fitpaper true --trim "{}cm {}cm {}cm {}cm" "static/before_add_padding/{}" -o "static/after_add_padding/{}"'.format(-int(left), -int(bottom), -int(right), -int(top), filename, filename))
         #os.system('pdfcrop --margins \'{} {} {} {}\' "static/before_add_padding/{}" "static/after_add_padding/{}"'.format(left, top, right, bottom, filename, filename))
         return #send_file("static/after_add_padding/{}".format(filename),as_attachment=True)
 
