@@ -1,32 +1,21 @@
-# PDF_padder
-2022 Summer MadCamp Week3 
+# PDF Padder
+> 2022 여름 MadCamp 2분반 박정은, 문동우 팀
 
-## Project name
-PDF padder
+## Project Name
+PDF Padder
 
 ## Teammates
-POSTECH 컴퓨터공학과 박정은
-
-KAIST 전산학부 문동우
+* KAIST 전산학부 [문동우](https://github.com/snaoyam)
+* POSTECH 컴퓨터공학과 [박정은](https://github.com/koyy001)
 
 ## Environment
-OS : Window
-
-Frontend : Java Script
-
-Backend : Python, HTML, css
-
-IDE : Visual studio Code
-
-Framework : Flask
-
-Backend: flask + json
-
-Database: SQLite
+* Frontend : NextJS with Typescript
+* Backend : Flask, Python, SQL
 
 ## Description
-이 웹은 PDF에 padding을 추가할 수 있고, JPG, PNG 등과같이 PDF가 아닌 파일을 PDF로 전환할 수 있으며, 여러 PDF를 하나의 PDF로 병합할 수 있다.
-PDF에 padding을 추가한다면, 문서 텍스트 바로 위에 필기를 할 수 있는 공간을 확보할 수 있다는 이점이 있다.
+PDF에 Padding을 추가할 수 있다. 추가적으로 여러 PDF 파일을 올려 하나의 파일로 병합하거나, image파이을 PDF로 전환할 수 있다.
+<br />
+PDF에 Padding을 추가한다면, 문서 텍스트 바로 위에 필기를 할 수 있는 공간을 확보할 수 있다는 이점이 있다.
 
 ## Implementation Method
 1. data 저장 : database_forPadding.csv
@@ -36,19 +25,30 @@ PDF에 padding을 추가한다면, 문서 텍스트 바로 위에 필기를 할 
 * csv에 저장된 정보들은, database_forPadding.py를 통해 각 함수가 필요로 하는 특정 data들로 parsing되어 app.py로 전달된다.
 
 ## Usage
-### tab1 – file upload
+### File Upload Page
 |file upload 화면|                                  
 |---|  
-|![image](https://user-images.githubusercontent.com/91946706/179745328-5e967bee-090f-4720-8caa-381800a434eb.png)|               
+|![image](https://user-images.githubusercontent.com/93732046/179911253-632514d3-c13a-4261-8266-c01d20ab95b7.png)|
+* 첫 화면에선 file을 upload한다.
+* 업로드한 파일들을 preview로 보여준다.                    
+* 한 번에 여러 파일을 Multi-upload 할 수도 있다. 
+* preview 박스를 드래그하여 순서를 변경할 수 있다.
+* Upload한 파일의 페이지 수가 많을 경우 앞쪽 일부 페이지만 보여준다. Expand Pages 버튼을 눌러 모든 페이지를 펼쳐 볼 수 있다.                   
+* Left, top, right, bottom 측에 얼마나 padding을 둘지에 대한 option을 입력받는다.
+* 입력한 option에 대하여 preview로 padding을 보여준다.
 
-첫 화면에선 file을 upload한다.                    
-한번에 여러 파일을 Multi upload 할 수도 있다.                    
-Left, top, right, bottom 측에 얼마나 padding을 둘지에 대한 option또한 입력받는다.
-
-### tab2 – file merge
+### File add padding complete
 |merged file download 화면|                                  
 |---|  
-|![image](https://user-images.githubusercontent.com/91946706/179752389-ea4d1da6-8969-475d-b447-779fd89db43d.png)|               
+|![image](https://user-images.githubusercontent.com/93732046/179912254-34e13ce6-56b4-4d18-9bce-3bafd9d7e878.png)|
 
-upload된 file들중, 해당 user id가 upload한 file들을 모두 merge하여 반환해준다.                   
-만약 입력받은 file이 PDF형식이 아닌 경우, 이는 PDF로 전환되어 merge작업이 이루어 진다.
+* 업로드한 파일들을 병합하고 패딩을 추가한 후 파일을 다운로드할 수 있는 페이지로 이동한다.               
+* Download File 버튼을 눌러 파일을 직접 다운로드 가능하다
+* 혹은 파일을 다운로드할 수 있는 시리얼 키를 제공한다
+
+### File download from another device
+|시리얼 키 input field|                                  
+|---|  
+|![image](https://user-images.githubusercontent.com/93732046/179911459-00f72bb7-4863-4239-be3a-37ae863b4bf8.png)|
+* 파일 업로드 후 받은 시리얼 키를 페이지 상단의 input field에 입력하면 파일을 바로 다운로드할 수 있다.
+
