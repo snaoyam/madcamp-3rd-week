@@ -13,11 +13,10 @@ PDF Padder
 * Backend : Flask, Python, SQL
 
 ## Description
-PDF에 Padding을 추가할 수 있다. 추가적으로 여러 PDF 파일을 올려 하나의 파일로 병합하거나, image파이을 PDF로 전환할 수 있다.
-<br />
+PDF에 Padding을 추가할 수 있다. 추가적으로 여러 PDF 파일을 올려 하나의 파일로 병합하거나, image파이을 PDF로 전환할 수 있다.  \
 PDF에 Padding을 추가한다면, 문서 텍스트 바로 위에 필기를 할 수 있는 공간을 확보할 수 있다는 이점이 있다.
 
-## Implementation Method
+## Server Implementation Method
 1. data 저장 : database_forPadding.csv
 * 사용자의 id와 사용자가 입력한 option들은 csv 파일에 [ index,filename,user_id,left,top,right,bottom ]형식의 data를 가진 list로 저장된다.
 * 입력된 user id에 따라서 오름차순으로 index값이 설정된다.
