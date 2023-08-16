@@ -113,7 +113,7 @@ class SideBar extends React.PureComponent<sideBarProps, sideBarState> {
                   this.props.dataTransferList.forEach(file => {
                     dataTransfer.items.add((file.file ?? { name: null }))
                   })
-                  Axios.postForm('//ssal.sparcs.org:30180/merge', {
+                  Axios.postForm('http://ssal.sparcs.org:30180/merge', {
                     'filecount': dataTransfer.files.length,
                     'files[]': dataTransfer.files,
                     'id': this.props.serialNumber.current,
