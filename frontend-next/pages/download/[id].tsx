@@ -6,7 +6,7 @@ import React from 'react'
 const Result = () => {
   const router = useRouter()
   useEffect(() => {
-    window.location.href = `https://ssal.sparcs.org:30180/download/${router.query.id}`
+    window.location.href = `https://pad-padder.olp.app/download/${router.query.id}`
     Router.replace('/')
   })
   return (

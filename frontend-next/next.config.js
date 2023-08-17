@@ -4,7 +4,7 @@ const nextConfig = {
   swcMinify: true,
   assetPrefix:
     process.env.NODE_ENV === 'production'
-      ? 'https://snaoyam.github.io/padpdf'
+      ? 'https://snaoyam.github.io/pdf-padder'
       : '',
 }
 

@@ -25,7 +25,7 @@ const Home: NextPage = () => {
   return (
     <React.Fragment>
       <Head>
-        <title>PadPdf</title>
+        <title>Pdf Padder</title>
       </Head>
       <Box sx={{
         display: 'flex',
