@@ -25,12 +25,12 @@ def create_app(config=None):
             top = request.values.to_dict()['top']
             right = request.values.to_dict()['right']
             bottom = request.values.to_dict()['bottom']
-           # left = str(round(int(left) * 28.3465))
+            #left = str(round(int(left) * 28.3465))
             #top = str(round(int(top) * 28.3465))
             #right = str(round(int(right) * 28.3465))
             #bottom = str(round(int(bottom) * 28.3465))
             for file in files:
-                filename = file.filename
+                filename = str(user_id) + file.filename
                 filename.replace(' ', '\ ')
                 file.stream.seek(0)
                 file.save("static/before_add_padding/{}".format(filename))
