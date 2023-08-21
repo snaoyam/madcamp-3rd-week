@@ -53,6 +53,8 @@ PDF에 Padding을 추가한다면, 문서 텍스트 바로 위에 필기를 할 
 
 
 ### Demo Video
-https://github.com/snaoyam/padpdf/assets/93732046/f4177b5b-5155-4c8b-ac0e-0f9d5547bd93
+https://github.com/snaoyam/pdf-padder/assets/93732046/56fdc4fb-6a7d-4bf5-b874-8461f9e39728
+
+
 
 
